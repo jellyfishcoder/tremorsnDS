@@ -124,8 +124,8 @@ DEPENDS		:=	$(OFILES:.o=.d)
 #--------------#
 # Main Targets #
 #--------------#
-$(OUTPUT).nds	:	$(OUTPUT).arm9
-$(OUTPUT).arm9	:	$(OUTPUT).elf
+$(OUTPUT).nds	:	$(OUTPUT).elf
+#$(OUTPUT).arm9	:	$(OUTPUT).elf
 $(OUTPUT).elf	:	$(OFILES)
 
 #----------------------------------------------#

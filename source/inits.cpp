@@ -11,13 +11,19 @@ void initVideo(int vidMode) {
 			// Setup the memory bank mapping
 			vramSetBankA(VRAM_A_MAIN_BG_0x06000000);	// Map bank A to main engine background slot 0
 			vramSetBankB(VRAM_B_MAIN_BG_0x06020000);	// Map bank B to main engine background slot 1
-			vramSetBankC(VRAM_C_SUB_BG_0x06200000);	// Map bank C to sub engine background slot 0
+			vramSetBankC(VRAM_C_SUB_BG_0x06200000);		// Map bank C to sub engine background slot 0
+			vramSetBankD(VRAM_D_LCD);			// Map bank D to extra LCD memory
 			// Set the video modes
-			videoSetMode(MODE_5_2D);		// Mode 5 will work, but others might also
-			videoSetModeSub(MODE_5_2D);
+			videoSetMode(MODE_5_2D |			// Mode 5 will work, but others also might
+					DISPLAY_BG2_ACTIVE |		// Enable BG2
+					DISPLAY_BG3_ACTIVE 		// Enable BG3
+				);
+			videoSetModeSub(MODE_5_2D |
+					DISPLAY_BG3_ACTIVE
+				);
 			// Check if it worked, if not die
-			sassert(videoGetMode()==5, "Video mode did not properly set main when initVideo(1) was called.");
-			sassert(videoGetModeSub()==5, "Video mode did not properly set sub when initVideo(1) was called.");
+			sassert(videoGetMode()==MODE_5_2D, "Video mode did not properly set main when initVideo(1) was called.");
+			sassert(videoGetModeSub()==MODE_5_2D, "Video mode did not properly set sub when initVideo(1) was called.");
 			break;
 		// 2D graphics on sub screen, 3D on main screen (usefull for cutsceans)
 		case 2:
