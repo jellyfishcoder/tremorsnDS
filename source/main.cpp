@@ -8,8 +8,8 @@ int main(void) {
 	lcdMainOnBottom();
 	// Display the main menu
 	mainMenu();
-
-	return 1;
+	while(1) swiWaitForVBlank();
+	return 0;
 }
 
 // MARK: Main Menu
@@ -75,6 +75,6 @@ void mainMenu(void) {
 	// SUBMARK: Display Sub Screen Background 3
 	dmaCopyHalfWords(3,
 			mmSubScreenBitmap,
-			(uint16 *)BG_BMP_RAM(0),
+			(uint16 *)BG_BMP_RAM_SUB(0),
 			mmSubScreenBitmapLen);
 }
