@@ -1,0 +1,11 @@
+# Set log level to 3
+-W3
+
+# Set transparent colour to black
+-gT000000
+
+# Bitmap image
+-gb
+
+#Set bit depth to 16
+-gB16
