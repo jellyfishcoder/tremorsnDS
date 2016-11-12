@@ -1,11 +1,20 @@
 // Include main header
 #include "main.h"
 
+touchPosition touch;
+PrintConsole topScreen;
+PrintConsole bottomScreen;
+
 int main(void) {
 	// Turn on 2D graphics core
 	powerOn(POWER_ALL_2D);
+	
 	// Place the main screen on the bottom physical screen
 	lcdMainOnBottom();
+	// Create font for cClock
+	//PrintConsole topScreen;
+	//PrintConsole bottomScreen;
+
 	// Display the main menu
 	mainMenu();
 	while(1) swiWaitForVBlank();
@@ -77,4 +86,26 @@ void mainMenu(void) {
 			mmSubScreenBitmap,
 			(uint16 *)BG_BMP_RAM_SUB(0),
 			mmSubScreenBitmapLen);
+	
+	// Setup Clock
+	consoleInit(&topScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+
+	bool tBreak=false;
+	while(!tBreak) {		// Wait for input
+		// Update clock
+		// showClock(true, &topScreen);
+		
+		// Check for input
+		scanKeys();
+		touchRead(&touch);
+		// Save input
+		int pressed = keysDown();
+
+		// If a button is pressed
+		if(pressed && pressed != KEY_TOUCH) {
+			mmEffect(SFX_BUTTON_PUSH);
+			tBreak=true;
+		}
+	}
+	sassert(0, "You Won By Causing a Fatal Crash!");
 }
