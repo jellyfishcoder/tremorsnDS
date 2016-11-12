@@ -157,7 +157,7 @@ $(OUTPUT).elf	:	$(OFILES)
 #----------------------------------------------#
 $(SOUNDBANK_NAME).bin	:	$(AUDIOFILES)
 	@echo $(notdir $^)
-	@mmutil -d $^ -o$(SOUNDBANK_NAME).bin -h$(SOUNDBANK_NAME).h
+	@mmutil $^ -d -o$(SOUNDBANK_NAME).bin -h$(SOUNDBANK_NAME).h
 
 -include $(DEPSDIR)/*.d
 
