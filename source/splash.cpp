@@ -45,8 +45,7 @@ void Splash::Animate(MathVector2D<int> _position, int _times) {
 	oamSetXY(&oamMain, this->oamId, this->position.x, this->position.y);	// Move sprite to specified coords before showing it
 	oamSetHidden(&oamMain, this->oamId, false);				// Unhide sprite
 	
-	//swiWaitForVBlank();
-	//oamUpdate(&oamMain);							// Update the OAM to move and show sprite
+	// Timer variables
 	long startTick;
 	long currentTick;
 
@@ -62,7 +61,7 @@ void Splash::Animate(MathVector2D<int> _position, int _times) {
 				swiWaitForVBlank();
 				oamUpdate(&oamMain);
 				currentTick = timerTick(0);
-				while(currentTick - startTick >= 128)  {		// 10 ms wait between frames
+				while(currentTick - startTick >= 128)  {
 					// Pass time
 					currentTick = timerTick(0);
 				}
@@ -70,7 +69,10 @@ void Splash::Animate(MathVector2D<int> _position, int _times) {
 		}
 	}
 	timerStop(0);
-	oamSetHidden(&oamMain, this->oamId, true);				// Go back in your hiding hold
+	// Hide the sprite again
+	oamSetHidden(&oamMain, this->oamId, true);
+	swiWaitForVBlank();
+	oamUpdate(&oamMain);
 }
 
 

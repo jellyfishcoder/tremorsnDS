@@ -21,6 +21,7 @@ int main(void) {
 
 	// Display the main menu
 	mainMenu();
+	
 	while(1) swiWaitForVBlank();
 	return 0;
 }
@@ -129,4 +130,23 @@ void mainMenu(void) {
 	tPos.y = sTouchY;
 	touchSplash.Animate(tPos, 2);		// Loop splash animation two times
 
+	// SUBMARK: Input Name and load/create coresponding save
+	Keyboard *kbd = keyboardDemoInit();	// Init keyboard
+	kbd->OnKeyPressed = OnKeyPressed;	// Setup keyboard
+	
+	char entreNm[128];			// Up to 128 chars, thats a long name
+	bool finEntreNm = false;		// Not finished entering name yet
+	while(!finEntreNm) {
+		scanf("%s", entreNm);		// Scan for keys and put them in char
+		
+		do {
+			scanKeys();
+		} while(!keysDown());
+	}
+}
+
+void OnKeyPressed(int key) {
+	if(key > 0) {
+		iprintf("%c", key);
+	}
 }

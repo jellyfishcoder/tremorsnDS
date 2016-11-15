@@ -27,5 +27,6 @@
 
 // Functions Referances
 void mainMenu();
+void OnKeyPressed(int key);
 
 #endif
