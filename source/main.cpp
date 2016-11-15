@@ -15,6 +15,10 @@ int main(void) {
 	// Place the main screen on the bottom physical screen
 	lcdMainOnBottom();
 
+	// Enable sound
+	soundEnable();
+	initSoundbank();
+
 	// Display the main menu
 	mainMenu();
 	while(1) swiWaitForVBlank();
@@ -23,6 +27,13 @@ int main(void) {
 
 // MARK: Main Menu
 void mainMenu(void) {
+	// Load sound effects
+	mm_sound_effect buttonpush = {
+		{ SFX_BUTTONPUSH },		// ID
+		0,				// Handle
+		255,				// Volume
+		255,				// Panning
+	};
 	/* * * * * * * * * * * * * * * * * * * * * *
 	 * Set the main screen video mode and the  *
 	 * sub screen video mode to have 2 text    *
@@ -30,6 +41,7 @@ void mainMenu(void) {
 	 * layers                                  *
 	 * * * * * * * * * * * * * * * * * * * * * */
 	initVideo(1);
+
 	// SUBMARK: Init Main Screen Background 3
 	/* * * * * * * * * * * * * * * * * * * * * *
 	 * Set up affine background 3 on the main  *
@@ -108,11 +120,7 @@ void mainMenu(void) {
 			touchRead(&touch);
 			sTouchX = touch.px;	// Save X coord
 			sTouchY = touch.py;	// Save Y coord
-			/* * * * * * * * * * * * * * * * * * *
-			 * Insert code to show a splash like *
-			 * effect sprite that startes where  *
-			 * touch is then expands to screen.  *
-			 * * * * * * * * * * * * * * * * * * */
+			mmEffectEx(&buttonpush);// Play button push sound effect
 			tBreak=true;		// Exit next loop
 		}
 	}
@@ -121,5 +129,4 @@ void mainMenu(void) {
 	tPos.y = sTouchY;
 	touchSplash.Animate(tPos, 2);		// Loop splash animation two times
 
-	sassert(false, "You Won By Causing a Fatal Crash!");
 }
