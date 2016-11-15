@@ -49,9 +49,14 @@ void mainMenu(void) {
 	 * screen as a 16 bit color bitmap type    *
 	 * background with a size of 256x256.      *
 	 * * * * * * * * * * * * * * * * * * * * * */
-	REG_BG3CNT = BG_BMP16_256x256 |		// Set background type to 16 bit 256x256 bitmap
-			BG_BMP_BASE(0) |	// Set the starting place in the memory to store the background
-			BG_PRIORITY(3);		// Set the priority to 3 (lower num = higher priority)
+	int bg3 = bgInit(3,			// Layer 3
+			BgType_Bmp16,
+			BgSize_B16_256x256,
+			0,
+			0);
+	//REG_BG3CNT = BG_BMP16_256x256 |		// Set background type to 16 bit 256x256 bitmap
+	//		BG_BMP_BASE(0) |	// Set the starting place in the memory to store the background
+	//		BG_PRIORITY(3);		// Set the priority to 3 (lower num = higher priority)
 	/* * * * * * * * * * * * * * * * * * * * * *
 	 * Set up an affine transformation matrix  *
 	 * for main bg 3. This matrix will be an   *
@@ -82,6 +87,14 @@ void mainMenu(void) {
 	REG_BG3X_SUB = 0;
 	REG_BG3Y_SUB = 0;
 
+	/* SUBMARK: Init Window Background 2
+	int bg2 = bgInit(2,			// Layer 2
+			BgType_Bmp16,
+			BgSize_B16_256x256,
+			8,			// Offset
+			0);			// Tile offset
+
+	*/
 	// SUBMARK: Display Main Screen Background 3
 	/* * * * * * * * * * * * * * * * * * * * * * *
 	 * Use the direct memory access (DMA) copy   *
@@ -130,23 +143,25 @@ void mainMenu(void) {
 	tPos.y = sTouchY;
 	touchSplash.Animate(tPos, 2);		// Loop splash animation two times
 
-	// SUBMARK: Input Name and load/create coresponding save
-	Keyboard *kbd = keyboardDemoInit();	// Init keyboard
-	kbd->OnKeyPressed = OnKeyPressed;	// Setup keyboard
+	// SUBMARK: Ask for save slot
 	
+	
+	// SUBMARK: Input Name and load/create coresponding save
+	Keyboard *kbd = keyboardInit(NULL, 3, BgType_Bmp16, BgSize_B16_256x256, 20, 0, true, true);	// Init keyboard
+	keyboardShow();
+
 	char entreNm[128];			// Up to 128 chars, thats a long name
+	int entreNmI = 0;
 	bool finEntreNm = false;		// Not finished entering name yet
 	while(!finEntreNm) {
-		scanf("%s", entreNm);		// Scan for keys and put them in char
-		
-		do {
-			scanKeys();
-		} while(!keysDown());
+		int key = keyboardUpdate();
+		if(key > 0) {
+			entreNm[entreNmI] = key;
+			consoleClear();
+			for(int i = 0; i <= entreNmI; i++) {
+				iprintf("%c", entreNm[i]);
+			}
+		}
+		swiWaitForVBlank();
 	}
-}
-
-void OnKeyPressed(int key) {
-	if(key > 0) {
-		iprintf("%c", key);
-	}
-}
+} 
