@@ -22,7 +22,8 @@
 
 // Custom Libraries
 #include "inits.h"
-// #include "clock.h"
+#include "types.h"
+#include "splash.h"
 
 // Functions Referances
 void mainMenu();

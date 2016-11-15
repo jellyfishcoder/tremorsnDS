@@ -9,6 +9,9 @@
 #include "soundbank.h"
 #include "soundbank_bin.h"
 
+#include "sprite.h"
+
 void initVideo(int vidMode);
 void initSoundbank(void);
+
 #endif

@@ -42,20 +42,17 @@ void initVideo(int vidMode) {
 	}
 }
 
-// MARK: Initialise Sprites
-
-
 // MARK: Initialise Soundbank
 void initSoundbank(void) {
 	mmInitDefaultMem((mm_addr)soundbank_bin);
 	// Load Sound Effects
-	mmLoadEffect(SFX_BUTTON_PUSH);
+	mmLoadEffect(SFX_BUTTONPUSH);
 
 	// Config Sound Effects
 	mm_sound_effect buttonpush = {
-		{ SFX_BUTTON_PUSH },		// ID
+		{ SFX_BUTTONPUSH },		// ID
 		0,				// Handle
 		255,				// Volume
 		255,				// Panning
 	};
-}
+} 

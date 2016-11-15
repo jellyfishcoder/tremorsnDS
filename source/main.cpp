@@ -6,14 +6,14 @@ PrintConsole topScreen;
 PrintConsole bottomScreen;
 
 int main(void) {
+	// Variable to store touch positions
+	touchPosition touch;
+
 	// Turn on 2D graphics core
 	powerOn(POWER_ALL_2D);
 	
 	// Place the main screen on the bottom physical screen
 	lcdMainOnBottom();
-	// Create font for cClock
-	//PrintConsole topScreen;
-	//PrintConsole bottomScreen;
 
 	// Display the main menu
 	mainMenu();
@@ -86,26 +86,43 @@ void mainMenu(void) {
 			mmSubScreenBitmap,
 			(uint16 *)BG_BMP_RAM_SUB(0),
 			mmSubScreenBitmapLen);
-	
-	// Setup Clock
-	consoleInit(&topScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+
+	oamInit(&oamMain, SpriteMapping_1D_128, false);
+	// Initilaise a new splash
+	Splash touchSplash(1);
+
+	// Starting touch variable
+	touchPosition sTouch;
+	int16 sTouchX, sTouchY;
 
 	bool tBreak=false;
-	while(!tBreak) {		// Wait for input
+	int pressed;
+
+	while(tBreak==false) {			// Wait for input
 		// Update clock
 		// showClock(true, &topScreen);
-		
-		// Check for input
+		// Read the button states
 		scanKeys();
-		touchRead(&touch);
-		// Save input
-		int pressed = keysDown();
 
-		// If a button is pressed
-		if(pressed && pressed != KEY_TOUCH) {
-			mmEffect(SFX_BUTTON_PUSH);
-			tBreak=true;
+		// If the screen was touched
+		if(keysDown() & KEY_TOUCH) {
+			touchRead(&sTouch);
+			sTouchX = sTouch.px;	// Save X coord
+			sTouchY = sTouch.py;	// Save Y coord
+			/* * * * * * * * * * * * * * * * * * *
+			 * Insert code to show a splash like *
+			 * effect sprite that startes where  *
+			 * touch is then expands to screen.  *
+			 * * * * * * * * * * * * * * * * * * */
+			tBreak=true;		// Exit next loop
 		}
 	}
-	sassert(0, "You Won By Causing a Fatal Crash!");
+	MathVector2D<int> tPos;
+	//tPos.x = sTouchX;
+	//tPos.y = sTouchY;
+	tPos.x = SCREEN_WIDTH/2;
+	tPos.y = SCREEN_HEIGHT/2;
+	touchSplash.Animate(tPos, 100);		// Loop splash animation two times
+
+	sassert(false, "You Won By Causing a Fatal Crash!");
 }
