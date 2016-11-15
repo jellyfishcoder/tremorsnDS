@@ -10,10 +10,11 @@ void initVideo(int vidMode) {
 		// 2D graphics on both screen
 		case 1:
 			// Setup the memory bank mapping
-			vramSetBankA(VRAM_A_MAIN_BG_0x06000000);	// Map bank A to main engine background slot 0
+			vramSetBankA(VRAM_A_MAIN_SPRITE_0x06400000);	// Map bank A to main sprite graphics slot 0
 			vramSetBankB(VRAM_B_MAIN_BG_0x06020000);	// Map bank B to main engine background slot 1
 			vramSetBankC(VRAM_C_SUB_BG_0x06200000);		// Map bank C to sub engine background slot 0
-			vramSetBankD(VRAM_D_LCD);			// Map bank D to extra LCD memory
+			vramSetBankD(VRAM_D_MAIN_BG_0x06000000);	// Map bank D to main engine background slot 0
+
 			// Set the video modes
 			videoSetMode(MODE_5_2D |			// Mode 5 will work, but others also might
 					DISPLAY_BG2_ACTIVE |		// Enable BG2
