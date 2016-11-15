@@ -1,14 +1,14 @@
 // Include main header
 #include "main.h"
 
+// Variables to store touch positions
 touchPosition touch;
+int16 touchX, touchY;
+
 PrintConsole topScreen;
 PrintConsole bottomScreen;
 
 int main(void) {
-	// Variable to store touch positions
-	touchPosition touch;
-
 	// Turn on 2D graphics core
 	powerOn(POWER_ALL_2D);
 	
@@ -88,16 +88,15 @@ void mainMenu(void) {
 			mmSubScreenBitmapLen);
 
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
-	// Initilaise a new splash
-	Splash touchSplash(1);
 
-	// Starting touch variable
-	touchPosition sTouch;
+	// SUBMARK: Setup Sprites and Interaction	
+	// Initilaise a new splash
+	Splash touchSplash(0);
+	// Variables to store touches
+	touchPosition touch;
 	int16 sTouchX, sTouchY;
 
 	bool tBreak=false;
-	int pressed;
-
 	while(tBreak==false) {			// Wait for input
 		// Update clock
 		// showClock(true, &topScreen);
@@ -106,9 +105,9 @@ void mainMenu(void) {
 
 		// If the screen was touched
 		if(keysDown() & KEY_TOUCH) {
-			touchRead(&sTouch);
-			sTouchX = sTouch.px;	// Save X coord
-			sTouchY = sTouch.py;	// Save Y coord
+			touchRead(&touch);
+			sTouchX = touch.px;	// Save X coord
+			sTouchY = touch.py;	// Save Y coord
 			/* * * * * * * * * * * * * * * * * * *
 			 * Insert code to show a splash like *
 			 * effect sprite that startes where  *
@@ -118,11 +117,9 @@ void mainMenu(void) {
 		}
 	}
 	MathVector2D<int> tPos;
-	//tPos.x = sTouchX;
-	//tPos.y = sTouchY;
-	tPos.x = SCREEN_WIDTH/2;
-	tPos.y = SCREEN_HEIGHT/2;
-	touchSplash.Animate(tPos, 100);		// Loop splash animation two times
+	tPos.x = sTouchX;
+	tPos.y = sTouchY;
+	touchSplash.Animate(tPos, 2);		// Loop splash animation two times
 
 	sassert(false, "You Won By Causing a Fatal Crash!");
 }
