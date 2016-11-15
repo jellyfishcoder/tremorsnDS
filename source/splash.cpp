@@ -50,19 +50,19 @@ void Splash::Animate(MathVector2D<int> _position, int _times) {
 	long startTick;
 	long currentTick;
 
-	timerStart(0, ClockDivider_1024, 0, NULL);				// Start timer 0 at 32.7284 ticks a millasec, and
+	timerStart(0, ClockDivider_1, 1024, NULL);				// Start timer 0 at 32.7284 ticks a millasec, and
 	for(int i = 0; i <= _times; i++) {
-		for(this->row = 0; this -> row <= TOTAL_ROWS; this->row++) {
-			for(this->column = 0; this->column <= COLUMNS_PER_ROW; this->column++) {
+		for(this->row = 0; this -> row < TOTAL_ROWS; this->row++) {
+			for(this->column = 0; this->column < COLUMNS_PER_ROW; this->column++) {
 				startTick = timerTick(0);
 				// Copy frame to gfx memory on demand
-				u8* offset = this->frame_gfx + this->column * 32*32 + row * COLUMNS_PER_ROW * 32*32;
+				u8* offset = this->frame_gfx + this->column * 32*32 + this->row * COLUMNS_PER_ROW * 32*32;
 				dmaCopy(offset, this->gfx_mem, 32*32);
 
 				swiWaitForVBlank();
 				oamUpdate(&oamMain);
 				currentTick = timerTick(0);
-				while(currentTick - startTick >= 330)  {		// 10 ms wait between frames
+				while(currentTick - startTick >= 128)  {		// 10 ms wait between frames
 					// Pass time
 					currentTick = timerTick(0);
 				}
