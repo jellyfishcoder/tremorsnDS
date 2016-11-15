@@ -20,7 +20,7 @@ Splash::Splash(int _oamId) {
 	dmaCopy(animatedSplashPal, SPRITE_PALETTE, 512);
 
 	oamSet(&oamMain,					// Will always be on touch screen
-		       	127,					// For now can only have one on 127 sprite
+		       	this->oamId,				// oamId
 			this->position.x,			// X Coords
 			this->position.y,			// Y Coords
 			0,					// Priority
@@ -30,31 +30,49 @@ Splash::Splash(int _oamId) {
 			this->gfx_mem,				// Graphics memory
 			-1,					// No rotation
 			false,					// Not doubled
-			true,					// Hide sprite until animation
+			false,					// Hide sprite until animation
 			false, false,				// Dont flip sprite V or H
 			false);					// Dont use mosaic
 	swiWaitForVBlank();
 	oamUpdate(&oamMain); 
 }
 
+// MARK: Animate (Put sprite at _position and loop full animation _times)
 void Splash::Animate(MathVector2D<int> _position, int _times) {
 	this->position.x = _position.x;						// X Coords
 	this->position.y = _position.y;						// Y Coords
 
 	oamSetXY(&oamMain, this->oamId, this->position.x, this->position.y);	// Move sprite to specified coords before showing it
 	oamSetHidden(&oamMain, this->oamId, false);				// Unhide sprite
+	
+	//swiWaitForVBlank();
+	//oamUpdate(&oamMain);							// Update the OAM to move and show sprite
+	long startTick;
+	long currentTick;
 
+	timerStart(0, ClockDivider_1024, 0, NULL);				// Start timer 0 at 32.7284 ticks a millasec, and
 	for(int i = 0; i <= _times; i++) {
-		for(this->frame = 0; this->frame <= FRAMES_PER_ANIMATION; this->frame++) {
-			// Copy frame to gfx memory on demand
-			u8* offset = this->frame_gfx + this->frame * 32*32;
-			dmaCopy(offset, this->gfx_mem, 32*32);
-			swiWaitForVBlank();
-			oamUpdate(&oamMain);
+		for(this->row = 0; this -> row <= TOTAL_ROWS; this->row++) {
+			for(this->column = 0; this->column <= COLUMNS_PER_ROW; this->column++) {
+				startTick = timerTick(0);
+				// Copy frame to gfx memory on demand
+				u8* offset = this->frame_gfx + this->column * 32*32 + row * COLUMNS_PER_ROW * 32*32;
+				dmaCopy(offset, this->gfx_mem, 32*32);
+
+				swiWaitForVBlank();
+				oamUpdate(&oamMain);
+				currentTick = timerTick(0);
+				while(currentTick - startTick >= 330)  {		// 10 ms wait between frames
+					// Pass time
+					currentTick = timerTick(0);
+				}
+			}
 		}
 	}
+	timerStop(0);
 	oamSetHidden(&oamMain, this->oamId, true);				// Go back in your hiding hold
 }
+
 
 void Splash::Suicide() {
 	oamFreeGfx(&oamMain, gfx_mem);	// Free the gfx memory allocated with oamAllocateGfx
