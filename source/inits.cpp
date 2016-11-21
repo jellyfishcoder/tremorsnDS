@@ -37,6 +37,17 @@ void initVideo(int vidMode) {
 			videoSetMode(MODE_0_3D);
 			videoSetModeSub(MODE_5_2D);
 			break;
+		/* 2D graphics on both screens with text layer
+		case 3:
+			vramSetBankA(VRAM_A_MAIN_SPRITE0x06400000);
+			vramSetBankB(VRAM_B_MAIN_BG_0x06020000);        // Map bank B to main engine background slot 1
+			vramSetBankC(VRAM_C_SUB_BG_0x06200000);         // Map bank C to sub engine background slot 0
+			vramSetBankD(VRAM_D_MAIN_BG_0x06000000);        // Map bank D to main engine background slot 0
+
+			// Set the video modes
+			videoSetMode(MODE_0_2D |
+
+		*/
 		default:
 			// Enter options next time...
 			break;

@@ -23,6 +23,7 @@
 // Custom Libraries
 #include "inits.h"
 #include "types.h"
+#include "button.h"
 #include "splash.h"
 
 // Functions Referances

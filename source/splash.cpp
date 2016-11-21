@@ -21,8 +21,8 @@ Splash::Splash(int _oamId) {
 
 	oamSet(&oamMain,					// Will always be on touch screen
 		       	this->oamId,				// oamId
-			this->position.x,			// X Coords
-			this->position.y,			// Y Coords
+			this->position.x - 16,			// X Coords
+			this->position.y - 16,			// Y Coords
 			0,					// Priority
 			0,					// Palette Alpha
 			SpriteSize_32x32,			// Size
@@ -39,8 +39,8 @@ Splash::Splash(int _oamId) {
 
 // MARK: Animate (Put sprite at _position and loop full animation _times)
 void Splash::Animate(MathVector2D<int> _position, int _times) {
-	this->position.x = _position.x;						// X Coords
-	this->position.y = _position.y;						// Y Coords
+	this->position.x = _position.x - 16;						// X Coords
+	this->position.y = _position.y - 16;						// Y Coords
 
 	oamSetXY(&oamMain, this->oamId, this->position.x, this->position.y);	// Move sprite to specified coords before showing it
 	oamSetHidden(&oamMain, this->oamId, false);				// Unhide sprite

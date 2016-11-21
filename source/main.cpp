@@ -54,9 +54,6 @@ void mainMenu(void) {
 			BgSize_B16_256x256,
 			0,
 			0);
-	//REG_BG3CNT = BG_BMP16_256x256 |		// Set background type to 16 bit 256x256 bitmap
-	//		BG_BMP_BASE(0) |	// Set the starting place in the memory to store the background
-	//		BG_PRIORITY(3);		// Set the priority to 3 (lower num = higher priority)
 	/* * * * * * * * * * * * * * * * * * * * * *
 	 * Set up an affine transformation matrix  *
 	 * for main bg 3. This matrix will be an   *
@@ -144,8 +141,27 @@ void mainMenu(void) {
 	touchSplash.Animate(tPos, 2);		// Loop splash animation two times
 
 	// SUBMARK: Ask for save slot
+	MathVector2D<int> b1Pos;
+	b1Pos.x = 64;
+	b1Pos.y = 32;
+	MathVector2D<float> b1Sca;
+	b1Sca.x = 1.0;
+	b1Sca.y = 1.0;
+	Button startB(1,				// oamId
+			1,			// Affine Tranform ID
+			b1Pos,			// Position
+			b1Sca);			// Scale
 	
-	
+	swiWaitForVBlank(); oamUpdate(&oamMain);
+	bool start = false;
+	touchPosition atouch;
+	while(start == false) {
+		scanKeys();
+		if(keysDown() && KEY_TOUCH) {
+			touchRead(&atouch);
+			start = startB.CheckTouch(atouch);
+		}
+	}
 	// SUBMARK: Input Name and load/create coresponding save
 	Keyboard *kbd = keyboardInit(NULL, 3, BgType_Bmp16, BgSize_B16_256x256, 20, 0, true, true);	// Init keyboard
 	keyboardShow();
