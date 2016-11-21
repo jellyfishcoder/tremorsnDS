@@ -140,30 +140,34 @@ void mainMenu(void) {
 	tPos.y = sTouchY;
 	touchSplash.Animate(tPos, 2);		// Loop splash animation two times
 
-	// SUBMARK: Ask for save slot
+	// SUBMARK: Have a button because we can... but we couldnt make the button say anything... because we cant
 	MathVector2D<int> b1Pos;
 	b1Pos.x = 128;
 	b1Pos.y = 96;
 	MathVector2D<float> b1Sca;
 	b1Sca.x = 1.0;
 	b1Sca.y = 1.0;
-	Button startB(1,				// oamId
+	Button startB(1,			// oamId
 			1,			// Affine Tranform ID
 			b1Pos,			// Position
 			b1Sca);			// Scale
 	
-	swiWaitForVBlank(); oamUpdate(&oamMain);
+	swiWaitForVBlank();
+	oamUpdate(&oamMain);
 	bool start = false;
 	touchPosition atouch;
 	while(start == false) {
 		scanKeys();
 		if(keysDown() && KEY_TOUCH) {
 			touchRead(&atouch);
-			start = startB.CheckTouch(atouch);
+			tPos.x = atouch.px;
+			tPos.y = atouch.py;
+			touchSplash.Animate(tPos, 1);
+			start = startB.CheckTouch(atouch);		// Clean this up to accept MathVector2D<int> rather than touchPosition
 		}
 	}
 
-	// SUBMARK: Input Name and load/create coresponding save
+	/* SUBMARK: Input Name and load/create coresponding save
 	Keyboard *kbd = keyboardInit(NULL, 3, BgType_Bmp16, BgSize_B16_256x256, 20, 0, true, true);	// Init keyboard
 	keyboardShow();
 
@@ -180,5 +184,14 @@ void mainMenu(void) {
 			}
 		}
 		swiWaitForVBlank();
-	}
+	}*/
+
+	// Destroy 2D sprites (splash will be recreated later)
+	startB.Suicide();
+	touchSplash.Suicide();
+
+	// Turn on all (previously just 2D was on)
+	powerOn(POWER_ALL);
+	// Change memory buffer mapping
+	
 } 

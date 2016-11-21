@@ -17,14 +17,14 @@ Splash::Splash(int _oamId) {
 	this->frame_gfx = (u8*)animatedSplashTiles;		// Im not sure exactly what this is for yet... I believe it is to tell where the gfx memory for a specific frame is, but I thought they were in the same place, maybe an offset of some sort... got it from the tut
 
 	// Copy palette for 256 color
-	dmaCopy(animatedSplashPal, SPRITE_PALETTE, 512);
+	dmaCopyHalfWords(3, animatedSplashPal, &SPRITE_PALETTE[this->oamId * 16], animatedSplashPalLen);
 
 	oamSet(&oamMain,					// Will always be on touch screen
 		       	this->oamId,				// oamId
 			this->position.x - 16,			// X Coords
 			this->position.y - 16,			// Y Coords
 			0,					// Priority
-			0,					// Palette Alpha
+			this->oamId,			// Palette Alpha
 			SpriteSize_32x32,			// Size
 			SpriteColorFormat_256Color,		// Color format
 			this->gfx_mem,				// Graphics memory
