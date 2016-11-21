@@ -52,13 +52,13 @@ bool Button::CheckTouch(touchPosition _touch) {
 	int touchx = _touch.px;
 	int touchy = _touch.py;
 	// Calculate button bounds
-	int left = this->position.x;
-	int right = this->position.x + 64 * this->scale.x;
-	int up = this->position.y;
-	int down = this->position.y + 32 * this->scale.y;
+	int left = this->position.x - 32;
+	int right = this->position.x + 32;// * this->scale.x;
+	int up = this->position.y - 16;
+	int down = this->position.y + 16;// * this->scale.y;
 	
 	// If touch is inside the button scale it down
-	if((touchx >= left) && (touchx <= right) && (touchy >= down) && (touchy <= up)) {
+	if((touchx >= left) && (touchx <= right) && (touchy <= down) && (touchy >= up)) {
 		/* Temporarily disable button anims
 		this->scale.x = this->scale.x/1.5;	// Scale down X axis
 		this->scale.y = this->scale.y/1.5;	// Scale down Y axis

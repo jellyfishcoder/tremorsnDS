@@ -142,8 +142,8 @@ void mainMenu(void) {
 
 	// SUBMARK: Ask for save slot
 	MathVector2D<int> b1Pos;
-	b1Pos.x = 64;
-	b1Pos.y = 32;
+	b1Pos.x = 128;
+	b1Pos.y = 96;
 	MathVector2D<float> b1Sca;
 	b1Sca.x = 1.0;
 	b1Sca.y = 1.0;
@@ -162,6 +162,7 @@ void mainMenu(void) {
 			start = startB.CheckTouch(atouch);
 		}
 	}
+
 	// SUBMARK: Input Name and load/create coresponding save
 	Keyboard *kbd = keyboardInit(NULL, 3, BgType_Bmp16, BgSize_B16_256x256, 20, 0, true, true);	// Init keyboard
 	keyboardShow();
