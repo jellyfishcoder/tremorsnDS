@@ -59,6 +59,7 @@ bool Button::CheckTouch(touchPosition _touch) {
 	
 	// If touch is inside the button scale it down
 	if((touchx >= left) && (touchx <= right) && (touchy >= down) && (touchy <= up)) {
+		/* Temporarily disable button anims
 		this->scale.x = this->scale.x/1.5;	// Scale down X axis
 		this->scale.y = this->scale.y/1.5;	// Scale down Y axis
 		
@@ -72,12 +73,13 @@ bool Button::CheckTouch(touchPosition _touch) {
 				timerUp = true);		// Then run pop button up function
 		}
 		this->Pop();
+		*/
 		return(true);				// Button was clicked
 	} else {
 		return(false);				// Button was not clicked
 	}
 }
-
+/* Temporarily disable button anims
 void Button::Pop() {
 	timerStop(1);					// Stop timer that started this
 
@@ -85,7 +87,7 @@ void Button::Pop() {
 	this->scale.y = this->scale.y * 1.5;		// Scale up Y axis
 
 	this->Update();
-}
+}*/
 
 void Button::Update() {
 	oamRotateScale(&oamMain,					// Main touchscreen
