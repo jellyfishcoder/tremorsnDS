@@ -11,6 +11,7 @@
 
 #include "sprite.h"
 
+void initHeader();
 void initVideo(int vidMode);
 void initSoundbank(void);
 

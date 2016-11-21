@@ -28,6 +28,7 @@
 
 // Functions Referances
 void mainMenu();
+void game();
 void OnKeyPressed(int key);
 
 #endif

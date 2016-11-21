@@ -59,4 +59,16 @@ void initSoundbank(void) {
 	mmInitDefaultMem((mm_addr)soundbank_bin);
 	// Load Sound Effects
 	mmLoadEffect(SFX_BUTTONPUSH);
+}
+
+// MARK: Initialise eeprom
+void initEeprom() {
+	// Give the ARM9 proc access to the nDS cartridge
+	sysSetBusOwners(true, true);
+	// SUBMARK: Verify the cartridge is not encrypted
+	static u8 cartCheck1[512];
+	static u8 cartCheck2[512];
+	cardReadHeader(cartCheck1);
+	cardReadHeader(cartCheck2);
+	sassert(memcmp(cartCheck1, cartCheck2, 32) == 0, "nDS Cartridge Encrypted, EEPROM Memory Unaccessable.");
 } 

@@ -8,4 +8,8 @@ struct MathVector2D {
 	T y;
 };
 
+/* Save slot
+struct SaveSlot {
+}
+*/
 #endif 
