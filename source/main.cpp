@@ -1,12 +1,17 @@
 // Include main header
 #include "main.h"
+#define NAME_ENTRY_MAX_LEN 16
 
 // Variables to store touch positions
 touchPosition touch;
 int16 touchX, touchY;
 
-PrintConsole topScreen;
-PrintConsole bottomScreen;
+PrintConsole pcSub;
+PrintConsole pcMain;
+
+int nameEntryCurLen = 0;
+bool nameEntryDone = false;
+char nameEntry[NAME_ENTRY_MAX_LEN];
 
 u32 inGameTime = 0;
 
@@ -169,28 +174,26 @@ void mainMenu(void) {
 		}
 	}
 
-	/* SUBMARK: Input Name and load/create coresponding save
-	Keyboard *kbd = keyboardInit(NULL, 3, BgType_Bmp16, BgSize_B16_256x256, 20, 0, true, true);	// Init keyboard
-	keyboardShow();
-
-	char entreNm[128];			// Up to 128 chars, thats a long name
-	int entreNmI = 0;
-	bool finEntreNm = false;		// Not finished entering name yet
-	while(!finEntreNm) {
-		int key = keyboardUpdate();
-		if(key > 0) {
-			entreNm[entreNmI] = key;
-			consoleClear();
-			for(int i = 0; i <= entreNmI; i++) {
-				iprintf("%c", entreNm[i]);
-			}
-		}
-		swiWaitForVBlank();
-	}*/
-
 	// Destroy 2D sprites (splash will be recreated later)
 	startB.Suicide();
 	touchSplash.Suicide();
+
+	// SUBMARK: Get the title
+	consoleSelect(&pcMain);
+	consoleInit(&pcMain, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, true, true);
+	// Create window for the print text above keyboard
+	consoleSetWindow(&pcMain, 0, 0, 32, 8);
+	// Create the keyboard
+	Keyboard* kb = keyboardInit(NULL,
+			2,						// Place above background, which is layer 3, so this is layer 2
+			BgType_Text4bpp,				// 4bpp tiled text background
+			BgSize_T_256x256,				// Full screen max size
+			2,						// Map base
+			0,						// Tile base
+			true,						// On main display
+			true);						// Load graphics
+	kb->OnKeyReleased = keyPress;
+	keyboardShow();
 
 	// Turn on all (previously just 2D was on)
 	powerOn(POWER_ALL);
@@ -246,6 +249,7 @@ void startGame(/*const char* save*/) {
 	sassert(true == false, "Worked, just this is all");
 }
 
+// MARK: Increment the time
 void incrementTime() {
 	if(inGameTime == 4294967294) {
 		inGameTime = 0;
@@ -255,6 +259,7 @@ void incrementTime() {
 	updateGameTime();
 }
 
+// MARK: Update "sun" position
 void updateGameTime() {
 	if((inGameTime >= 0) && (inGameTime <= 2147483647)) {
 		int mapAngle = pi*(inGameTime/2147483647);
@@ -271,4 +276,48 @@ void updateGameTime() {
 			RGB15(0,0,0),
 			floattov10(0.0f),floattov10(0.0f),floattov10(0.0f));
 	}
+}
+
+// MARK: Get pressed key from name keyboard into char nameEntry[16]
+void keyPress(int c) {
+	bool toBreak = false;
+	switch(c) {
+		case 0:
+			// 0 is ascii null char
+			toBreak = true;
+			break;
+		case 8:
+			// 8 is ascii backspace char, so delete
+			nameEntryCurLen--;
+			nameEntry[nameEntryCurLen] = NULL;
+			toBreak = true;
+			break;
+		case 127:
+			// 127 is ascii delete char, so delete
+			nameEntryCurLen--;
+			nameEntry[nameEntryCurLen] = NULL;
+			toBreak = true;
+			break;
+		case 133:
+			// 133 is ascii carriage return, so submit
+			nameEntryDone = true;
+			toBreak = true;
+			break;
+	}
+	if((toBreak == false) && (nameEntryCurLen <= NAME_ENTRY_MAX_LEN)) {
+		nameEntry[nameEntryCurLen] = c;
+		nameEntryCurLen++;
+	} else if (toBreak == false) {
+		nameEntryCurLen--;
+		nameEntry[nameEntryCurLen-1] = c;
+	}
+}
+
+// MARK: Useless Function which should be integrated into main code later
+char* getSaveName() {
+	while(nameEntryDone == false) {
+		keyboardUpdate();
+		swiWaitForVBlank();
+	}
+	return nameEntry;
 }

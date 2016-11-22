@@ -30,13 +30,13 @@
 #include "types.h"
 #include "button.h"
 #include "splash.h"
-#include "cube.h"	// Temporary
 
 // Functions Referances
 void mainMenu();
 void startGame();
-void OnKeyPressed(int key);
 void updateGameTime();
 void incrementTime();
+char* getSaveName();
+void keyPress(int c);
 
 #endif
