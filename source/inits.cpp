@@ -27,15 +27,21 @@ void initVideo(int vidMode) {
 			sassert(videoGetMode()==MODE_5_2D, "Video mode did not properly set main when initVideo(1) was called.");
 			sassert(videoGetModeSub()==MODE_5_2D, "Video mode did not properly set sub when initVideo(1) was called.");
 			break;
-		// 2D graphics on sub screen, 3D on main screen (usefull for cutsceans)
+		// 2D graphics on sub screen, 3D on main screen
 		case 2:
 			// Setup the memory bank mapping
-			vramSetBankA(VRAM_A_TEXTURE_SLOT0);	// Map bank A to 3d texture slot 0
-			vramSetBankB(VRAM_B_TEXTURE_SLOT1);	// Map bank B to 3d texture slot 1
-			vramSetBankC(VRAM_C_SUB_BG_0x06200000);	// Map bank C to sub engine background slot 0
+			vramSetBankA(VRAM_A_TEXTURE_SLOT0);		// Map bank A to 3d texture slot 0
+			vramSetBankB(VRAM_B_TEXTURE_SLOT1);		// Map bank B to 3d texture slot 1
+			vramSetBankC(VRAM_C_SUB_BG_0x06200000);		// Map bank C to sub engine background slot 0
+			vramSetBankD(VRAM_D_SUB_SPRITE);		// Map bank D to sub sprite graphics slot 0
+			vramSetBankE(VRAM_E_MAIN_SPRITE);		// Map bank E to main sprite graphics slot 0 first part of first half
+			vramSetBankF(VRAM_F_TEX_PALETTE_SLOT0);		// Map bank F to 3d texture palette slot 1
+			vramSetBankG(VRAM_G_MAIN_SPRITE_0x06404000);	// Map bank G to main sprite graphics slot 0 second part of first half
+
 			// Set the video modes
 			videoSetMode(MODE_0_3D);
-			videoSetModeSub(MODE_5_2D);
+			videoSetModeSub(MODE_5_2D |
+					DISPLAY_BG3_ACTIVE);
 			break;
 		/* 2D graphics on both screens with text layer
 		case 3:
@@ -71,4 +77,15 @@ void initEeprom() {
 	cardReadHeader(cartCheck1);
 	cardReadHeader(cartCheck2);
 	sassert(memcmp(cartCheck1, cartCheck2, 32) == 0, "nDS Cartridge Encrypted, EEPROM Memory Unaccessable.");
+}
+
+// MARK: Initialise Map
+void initMap(int mapNum) {
+	switch(mapNum) {
+		case 1:
+			// Load initial level
+			break;
+		default:
+			break;
+	}
 } 

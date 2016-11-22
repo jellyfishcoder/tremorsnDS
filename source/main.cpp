@@ -8,6 +8,8 @@ int16 touchX, touchY;
 PrintConsole topScreen;
 PrintConsole bottomScreen;
 
+u32 inGameTime = 0;
+
 int main(void) {
 	// Turn on 2D graphics core
 	powerOn(POWER_ALL_2D);
@@ -193,5 +195,80 @@ void mainMenu(void) {
 	// Turn on all (previously just 2D was on)
 	powerOn(POWER_ALL);
 	// Change memory buffer mapping
+	initVideo(2);
+	startGame();
+}
+
+void startGame(/*const char* save*/) {
+	MathVector3D<float> playerPos = { 0.0, 2.0, 0.0 };
 	
-} 
+	/* Local Variables to be Loaded from saveDir
+	GLvector playerPos;
+	u8 inGameTime;				// 0 is midnight
+	int len;
+
+	DIR* saveDir = opendir("/");
+	struct dirent* saveEnt = readdir(saveDir);	// Save the ents
+
+
+
+	FILE* saveFile = fopen(save, "rb");	// Readonly
+	if(saveFile) {				// Not new game
+		fseek(saveFile,0,SEEK_END);
+		len = ftell(saveFile);
+		fseek(saveFile,0,SEEK_SET);
+	*/
+
+	// Set up GL
+	glInit();
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_ANTIALIAS);
+	glViewport(0, 0, 255, 191);		// Viewport is whole screen
+
+	// Load map
+	initMap(1);				// Assume map 1 for now
+	// Start time system
+	timerStart(0,				// Timer 0
+			ClockDivider_1024,	// 327,284.98 ticks per second
+			327285,			// About one overflow per second
+			incrementTime);	// Increment timer
+
+	gluLookAtf32(floattof32(playerPos.x),		// Camera x
+			floattof32(playerPos.y),	// Camera y
+			floattof32(playerPos.z),	// Camera z
+			floattof32(0.0f),		// Camera look x
+			floattof32(0.0f),		// Camera look y
+			floattof32(0.0f),		// Camera look z
+			floattof32(0.0f),		// Camera up x
+			floattof32(0.0f),		// Camera up y
+			floattof32(1.0f));		// Camera up z
+
+	sassert(true == false, "Worked, just this is all");
+}
+
+void incrementTime() {
+	if(inGameTime == 4294967294) {
+		inGameTime = 0;
+	} else {
+		inGameTime++;
+	}
+	updateGameTime();
+}
+
+void updateGameTime() {
+	if((inGameTime >= 0) && (inGameTime <= 2147483647)) {
+		int mapAngle = pi*(inGameTime/2147483647);
+		float mapAngleCos = -1.0f * cos(mapAngle);
+		float mapAngleSin = -1.0f * sin(mapAngle);
+		// Update the sun light
+		glLight(0,
+			RGB15(31,31,31),	// 31 is max with 5 bits
+			floattov10(0.0f),	// X component is always 0
+			floattov10(-1.0f * mapAngleCos),
+			floattov10(-1.0f * mapAngleSin));
+	} else {
+		glLight(0,
+			RGB15(0,0,0),
+			floattov10(0.0f),floattov10(0.0f),floattov10(0.0f));
+	}
+}

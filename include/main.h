@@ -8,9 +8,14 @@
 #include <nds/arm9/sassert.h>	// To use sassert and print crash message
 #include <maxmod9.h>
 
+// File Sys Libraries
+#include <filesystem.h>
+#include <dirent.h>
+
 // Standard Libraries
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Background Headers (IK mm for main menu is confusing with mm for maxmod)
 #include "mmMainScreen.h"
@@ -25,10 +30,13 @@
 #include "types.h"
 #include "button.h"
 #include "splash.h"
+#include "cube.h"	// Temporary
 
 // Functions Referances
 void mainMenu();
-void game();
+void startGame();
 void OnKeyPressed(int key);
+void updateGameTime();
+void incrementTime();
 
 #endif
