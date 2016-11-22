@@ -6,11 +6,11 @@
 touchPosition touch;
 int16 touchX, touchY;
 
-PrintConsole pcSub;
+//PrintConsole pcSub;
 PrintConsole pcMain;
 
-int nameEntryCurLen = 0;
-bool nameEntryDone = false;
+//int nameEntryCurLen = 0;
+//bool nameEntryDone = false;
 char nameEntry[NAME_ENTRY_MAX_LEN];
 
 u32 inGameTime = 0;
@@ -192,17 +192,21 @@ void mainMenu(void) {
 			0,						// Tile base
 			true,						// On main display
 			true);						// Load graphics
-	kb->OnKeyReleased = keyPress;
+	//kb->OnKeyReleased = keyPress;
 	keyboardShow();
-
+	// Get a name for save file
+	char nameEntry[NAME_ENTRY_MAX_LEN];
+	keyboardGetString(nameEntry, NAME_ENTRY_MAX_LEN);
+	//getSaveName();
+	keyboardHide();
 	// Turn on all (previously just 2D was on)
 	powerOn(POWER_ALL);
 	// Change memory buffer mapping
 	initVideo(2);
-	startGame();
+	startGame(nameEntry);
 }
 
-void startGame(/*const char* save*/) {
+void startGame(char* save) {
 	MathVector3D<float> playerPos = { 0.0, 2.0, 0.0 };
 	
 	/* Local Variables to be Loaded from saveDir
@@ -278,7 +282,7 @@ void updateGameTime() {
 	}
 }
 
-// MARK: Get pressed key from name keyboard into char nameEntry[16]
+/* MARK: Get pressed key from name keyboard into char nameEntry[16]
 void keyPress(int c) {
 	bool toBreak = false;
 	switch(c) {
@@ -289,13 +293,13 @@ void keyPress(int c) {
 		case 8:
 			// 8 is ascii backspace char, so delete
 			nameEntryCurLen--;
-			nameEntry[nameEntryCurLen] = NULL;
+			nameEntry[nameEntryCurLen] = 0;
 			toBreak = true;
 			break;
 		case 127:
 			// 127 is ascii delete char, so delete
 			nameEntryCurLen--;
-			nameEntry[nameEntryCurLen] = NULL;
+			nameEntry[nameEntryCurLen] = 0;
 			toBreak = true;
 			break;
 		case 133:
@@ -311,13 +315,16 @@ void keyPress(int c) {
 		nameEntryCurLen--;
 		nameEntry[nameEntryCurLen-1] = c;
 	}
+	iprintf("\x1b[2J");	// Clear screen and reset cursor to home
+	for(int i = 0; i <= nameEntryCurLen; i++) {
+		iprintf(&nameEntry[nameEntryCurLen]);
+	}
 }
 
 // MARK: Useless Function which should be integrated into main code later
-char* getSaveName() {
+void getSaveName() {
 	while(nameEntryDone == false) {
 		keyboardUpdate();
 		swiWaitForVBlank();
 	}
-	return nameEntry;
-}
+}*/

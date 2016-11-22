@@ -33,10 +33,10 @@
 
 // Functions Referances
 void mainMenu();
-void startGame();
+void startGame(char* save);
 void updateGameTime();
 void incrementTime();
-char* getSaveName();
+void getSaveName();
 void keyPress(int c);
 
 #endif
