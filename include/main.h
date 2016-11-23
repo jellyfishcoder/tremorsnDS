@@ -20,6 +20,8 @@
 // Background Headers (IK mm for main menu is confusing with mm for maxmod)
 #include "mmMainScreen.h"
 #include "mmSubScreen.h"
+// Font headers
+#include "font.h"
 
 // Soundbank Headers
 #include "soundbank.h"
@@ -30,7 +32,6 @@
 #include "types.h"
 #include "button.h"
 #include "splash.h"
-#include "keyboardplus.h"
 
 // Functions Referances
 void mainMenu();
