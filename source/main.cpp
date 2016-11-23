@@ -9,8 +9,8 @@ int16 touchX, touchY;
 //PrintConsole pcSub;
 PrintConsole pcMain;
 
-//int nameEntryCurLen = 0;
-//bool nameEntryDone = false;
+int nameEntryCurLen = 0;
+bool nameEntryDone = false;
 char nameEntry[NAME_ENTRY_MAX_LEN];
 
 u32 inGameTime = 0;
@@ -57,10 +57,11 @@ void mainMenu(void) {
 	 * background with a size of 256x256.      *
 	 * * * * * * * * * * * * * * * * * * * * * */
 	int bg3 = bgInit(3,			// Layer 3
-			BgType_Bmp16,
-			BgSize_B16_256x256,
-			0,
-			0);
+			BgType_Bmp16,		// 16 colour bitmap
+			BgSize_B16_256x256,	// Max size is bigger than screen
+			0,			// Map base (16k offset)
+			0);			// Tile base (unused 16k offset)
+
 	/* * * * * * * * * * * * * * * * * * * * * *
 	 * Set up an affine transformation matrix  *
 	 * for main bg 3. This matrix will be an   *
@@ -81,9 +82,15 @@ void mainMenu(void) {
 	REG_BG3Y = 0;
        	
 	// SUBMARK: Init Sub Screen Background 3
-	REG_BG3CNT_SUB = BG_BMP16_256x256 |
+	int bg3sub = bgInitSub(3,		// Layer (or priority) 3
+			BgType_Bmp16,		// 16 colour bitmap
+			BgSize_B16_256x256,
+			0,			// Map base (16k offset)
+			0);			// Tile base (unused 16k offset)
+	
+	/*REG_BG3CNT_SUB = BG_BMP16_256x256 |
 				BG_BMP_BASE(0) |
-				BG_PRIORITY(3);
+				BG_PRIORITY(3);*/
 	REG_BG3PA_SUB = 1 << 8;
 	REG_BG3PB_SUB = 0;
 	REG_BG3PC_SUB = 0;
@@ -91,14 +98,6 @@ void mainMenu(void) {
 	REG_BG3X_SUB = 0;
 	REG_BG3Y_SUB = 0;
 
-	/* SUBMARK: Init Window Background 2
-	int bg2 = bgInit(2,			// Layer 2
-			BgType_Bmp16,
-			BgSize_B16_256x256,
-			8,			// Offset
-			0);			// Tile offset
-
-	*/
 	// SUBMARK: Display Main Screen Background 3
 	/* * * * * * * * * * * * * * * * * * * * * * *
 	 * Use the direct memory access (DMA) copy   *
@@ -178,26 +177,40 @@ void mainMenu(void) {
 	startB.Suicide();
 	touchSplash.Suicide();
 
+	// Update screen
+	swiWaitForVBlank();
+	oamUpdate(&oamMain);
+
+	// Deallocate large 16 bit main screen background
+	bgHide(bg3);							// Dont really know how to deallocate, so just gunna hide it and write over its mem
+
 	// SUBMARK: Get the title
 	consoleSelect(&pcMain);
-	consoleInit(&pcMain, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, true, true);
+	consoleInit(&pcMain, 0, BgType_Text4bpp, BgSize_T_256x256, 7, 1, true, true);
+	
 	// Create window for the print text above keyboard
 	consoleSetWindow(&pcMain, 0, 0, 32, 8);
+
 	// Create the keyboard
 	Keyboard* kb = keyboardInit(NULL,
-			2,						// Place above background, which is layer 3, so this is layer 2
+			1,						// Place above background, which is layer 3, so this is layer 2
 			BgType_Text4bpp,				// 4bpp tiled text background
 			BgSize_T_256x256,				// Full screen max size
-			2,						// Map base
-			0,						// Tile base
+			7,						// Map base
+			1,						// Tile base
 			true,						// On main display
 			true);						// Load graphics
-	//kb->OnKeyReleased = keyPress;
+
+	kb->OnKeyReleased = keyPress;					// Set the on key released action
+	kb->offset_y = 0;						// Y offset, by default this is incorrect
+	kb->offset_x = 0;						// X offset, by default this is correct
+	swiWaitForVBlank();						// Wait until changes take place or weird stuff will show up
+
 	keyboardShow();
 	// Get a name for save file
-	char nameEntry[NAME_ENTRY_MAX_LEN];
 	keyboardGetString(nameEntry, NAME_ENTRY_MAX_LEN);
 	//getSaveName();
+	// Hide keyboard
 	keyboardHide();
 	// Turn on all (previously just 2D was on)
 	powerOn(POWER_ALL);
@@ -282,28 +295,23 @@ void updateGameTime() {
 	}
 }
 
-/* MARK: Get pressed key from name keyboard into char nameEntry[16]
+// MARK: Get pressed key from name keyboard into char nameEntry[16]
 void keyPress(int c) {
 	bool toBreak = false;
 	switch(c) {
-		case 0:
-			// 0 is ascii null char
+		case NOKEY:			// Null char
 			toBreak = true;
 			break;
-		case 8:
-			// 8 is ascii backspace char, so delete
+		case DVK_BACKSPACE:		// Backspace
 			nameEntryCurLen--;
 			nameEntry[nameEntryCurLen] = 0;
 			toBreak = true;
 			break;
-		case 127:
-			// 127 is ascii delete char, so delete
-			nameEntryCurLen--;
-			nameEntry[nameEntryCurLen] = 0;
+		case DVK_ENTER:			// Entre
+			nameEntryDone = true;
 			toBreak = true;
 			break;
-		case 133:
-			// 133 is ascii carriage return, so submit
+		case DVK_TAB:			// Kinda like entre
 			nameEntryDone = true;
 			toBreak = true;
 			break;
@@ -327,4 +335,4 @@ void getSaveName() {
 		keyboardUpdate();
 		swiWaitForVBlank();
 	}
-}*/
+}

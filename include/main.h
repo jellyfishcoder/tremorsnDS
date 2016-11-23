@@ -30,6 +30,7 @@
 #include "types.h"
 #include "button.h"
 #include "splash.h"
+#include "keyboardplus.h"
 
 // Functions Referances
 void mainMenu();

@@ -13,7 +13,7 @@ void initVideo(int vidMode) {
 			vramSetBankA(VRAM_A_MAIN_SPRITE_0x06400000);	// Map bank A to main sprite graphics slot 0
 			vramSetBankB(VRAM_B_MAIN_BG_0x06020000);	// Map bank B to main engine background slot 1
 			vramSetBankC(VRAM_C_SUB_BG_0x06200000);		// Map bank C to sub engine background slot 0
-			vramSetBankD(VRAM_D_MAIN_BG_0x06000000);	// Map bank D to main engine background slot 0
+			vramSetBankD(VRAM_D_MAIN_BG_0x06000000);	// Map bank D to main engine background slot 2
 
 			// Set the video modes
 			videoSetMode(MODE_5_2D |			// Mode 5 will work, but others also might
@@ -88,4 +88,4 @@ void initMap(int mapNum) {
 		default:
 			break;
 	}
-} 
+}

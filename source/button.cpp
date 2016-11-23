@@ -104,6 +104,8 @@ void Button::Update() {
 }
 
 void Button::Suicide() {
+	oamClearSprite(&oamMain, this->oamId);				// Clear the sprite
+
 	oamFreeGfx(&oamMain, gfx_mem);					// Free the graphics memory
 	delete this;							// Very dangerous method of destroying object, need to change for reliability later (maybe, not likely that it will get changed)
 }
