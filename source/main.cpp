@@ -194,7 +194,7 @@ void mainMenu(void) {
 	consoleSelect(pcMain);
 	consoleInit(pcMain, 0, BgType_Text4bpp, BgSize_T_256x256, 7, 3, true, true);
 	
-/*	ConsoleFont font;
+	/*ConsoleFont font;
 	font.gfx = (u16*)fontTiles;
 	font.pal = (u16*)fontPal;
 	font.numChars = 128;
@@ -204,6 +204,7 @@ void mainMenu(void) {
 	font.convertSingleColor = true;
 
 	consoleSetFont(pcMain, &font);*/
+	
 	// Create window for the print text above keyboard
 	//consoleSetWindow(pcMain, 0, 0, 32, 12);
 
@@ -233,49 +234,13 @@ void mainMenu(void) {
 }
 
 void startGame(char* save) {
-	MathVector3D<float> playerPos = { 0.0, 2.0, 0.0 };
-	
-	/* Local Variables to be Loaded from saveDir
-	GLvector playerPos;
-	u8 inGameTime;				// 0 is midnight
-	int len;
-
-	DIR* saveDir = opendir("/");
-	struct dirent* saveEnt = readdir(saveDir);	// Save the ents
-
-
-
-	FILE* saveFile = fopen(save, "rb");	// Readonly
-	if(saveFile) {				// Not new game
-		fseek(saveFile,0,SEEK_END);
-		len = ftell(saveFile);
-		fseek(saveFile,0,SEEK_SET);
-	*/
-
-	// Set up GL
-	glInit();
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_ANTIALIAS);
-	glViewport(0, 0, 255, 191);		// Viewport is whole screen
-
-	// Load map
-	initMap(1);				// Assume map 1 for now
+	initGL();
 	// Start time system
-	timerStart(0,				// Timer 0
-			ClockDivider_1024,	// 327,284.98 ticks per second
-			327285,			// About one overflow per second
-			incrementTime);	// Increment timer
-
-	gluLookAtf32(floattof32(playerPos.x),		// Camera x
-			floattof32(playerPos.y),	// Camera y
-			floattof32(playerPos.z),	// Camera z
-			floattof32(0.0f),		// Camera look x
-			floattof32(0.0f),		// Camera look y
-			floattof32(0.0f),		// Camera look z
-			floattof32(0.0f),		// Camera up x
-			floattof32(0.0f),		// Camera up y
-			floattof32(1.0f));		// Camera up z
-
+	//timerStart(0,				// Timer 0
+	//		ClockDivider_1024,	// 327,284.98 ticks per second
+	//		327285,			// About one overflow per second
+	//		incrementTime);	// Increment timer
+	
 	sassert(true == false, "Worked, just this is all");
 }
 

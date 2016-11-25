@@ -15,5 +15,6 @@ void initHeader();
 void initVideo(int vidMode);
 void initSoundbank(void);
 void initMap(int map);
+void initGL();
 
 #endif
