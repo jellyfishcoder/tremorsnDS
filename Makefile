@@ -46,7 +46,7 @@ CFLAGS		:=	-g -Wall -O2\
 
 CFLAGS		+=	$(INCLUDE) -DARM9
 
-CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
+CXXFLAGS	:=	$(CFLAGS) -fno-exceptions
 
 ASFLAGS		:=	-g $(ARCH)
 LDFLAGS		=	-specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
@@ -101,7 +101,8 @@ export AUDIOFILES	:=	$(foreach dir,$(AUDIO),$(notdir $(wildcard $(dir)/*)))
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-				-I$(CURDIR)/$(BUILD)
+				-I$(CURDIR)/$(BUILD) \
+				-I/usr/local/include
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
