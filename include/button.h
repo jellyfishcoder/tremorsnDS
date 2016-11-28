@@ -14,7 +14,7 @@ class Button {
 		int oamId;			// oamId
 		int affId;			// affId (for affine transform matrix)
 		MathVector2D<float> scale;	// Float representation of the scale (automatically changed to 8 bit fixed)
-		void init(const Button & others);
+		void init(const Button & other);
 	public:
 		Button(int _oamId, int _affId, MathVector2D<int> _position, MathVector2D<float> _size);
 		bool CheckTouch(touchPosition _touch);

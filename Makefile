@@ -42,11 +42,11 @@ ARCH		:=	-mthumb -mthumb-interwork
 CFLAGS		:=	-g -Wall -O2\
 				-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
 				-ffast-math \
-				$(ARCH)
+				$(ARCH) 
 
 CFLAGS		+=	$(INCLUDE) -DARM9
 
-CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
+CXXFLAGS	:=	$(CFLAGS) -fno-exceptions -std=c++11
 
 ASFLAGS		:=	-g $(ARCH)
 LDFLAGS		=	-specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
@@ -54,12 +54,12 @@ LDFLAGS		=	-specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 #-----------------------------------#
 # Extra libraries linked to project #
 #-----------------------------------#
-LIBS		:=	-lmm9 -lnds9
+LIBS		:=	-lmm9 -lfilesystem -lfat -lnds9
 
 #------------------------------------------#
 # List of directories containing libraries #
 #------------------------------------------#
-LIBDIRS		:=	$(LIBNDS)
+LIBDIRS		:=	$(LIBNDS) $(LIBNDS_CEREAL)
 
 #----------------------------------#
 # Not much to edit past this point #

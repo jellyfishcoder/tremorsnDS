@@ -1,13 +1,12 @@
 #include "button.h"
 
 Button::Button(int _oamId, int _affId, MathVector2D<int> _position, MathVector2D<float> _scale) {
-	this->position.x = _position.x;		// Set X Coords
-	this->position.y = _position.y;		// Set Y Coords
-	this->scale.x = _scale.x;		// Set X scale
-	this->scale.y = _scale.y;		// Set Y scale
+	// Set position and scale
+	this->position = _position;
+	this->scale = _scale;
+	// Set identifiers
 	this->oamId = _oamId;			// Set oamId
 	this->affId = _affId;			// Set affId
-
 	// Memory allocation
 	this->gfx_mem = oamAllocateGfx(&oamMain, SpriteSize_64x32, SpriteColorFormat_16Color);
 	this->frame_gfx = (u8*) parchButtonTilesLen;

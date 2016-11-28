@@ -149,8 +149,9 @@ void mainMenu(void) {
 	b1Pos.x = 128;
 	b1Pos.y = 96;
 	MathVector2D<float> b1Sca;
-	b1Sca.x = 1.0;
-	b1Sca.y = 1.0;
+	b1Pos.x = 1.0; 
+	b1Pos.y = 1.0;
+
 	Button startB(1,			// oamId
 			1,			// Affine Tranform ID
 			b1Pos,			// Position
@@ -232,7 +233,10 @@ void mainMenu(void) {
 	startGame(nameEntry);
 }
 
-void startGame(char* save) {
+void startGame(const char* save) {
+	// Create new or load save file
+	SaveData saveFile(save);
+	
 	initGL();
 	// Start time system
 	//timerStart(0,				// Timer 0
