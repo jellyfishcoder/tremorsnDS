@@ -42,11 +42,11 @@ ARCH		:=	-mthumb -mthumb-interwork
 CFLAGS		:=	-g -Wall -O2\
 				-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
 				-ffast-math \
-				$(ARCH)
+				$(ARCH) 
 
 CFLAGS		+=	$(INCLUDE) -DARM9
 
-CXXFLAGS	:=	$(CFLAGS) -fno-exceptions
+CXXFLAGS	:=	$(CFLAGS) -fno-exceptions -std=c++11
 
 ASFLAGS		:=	-g $(ARCH)
 LDFLAGS		=	-specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
@@ -59,7 +59,7 @@ LIBS		:=	-lmm9 -lnds9
 #------------------------------------------#
 # List of directories containing libraries #
 #------------------------------------------#
-LIBDIRS		:=	$(LIBNDS)
+LIBDIRS		:=	$(LIBNDS) $(LIBNDS_CEREAL)
 
 #----------------------------------#
 # Not much to edit past this point #
@@ -101,8 +101,7 @@ export AUDIOFILES	:=	$(foreach dir,$(AUDIO),$(notdir $(wildcard $(dir)/*)))
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-iquote $(CURDIR)/$(dir)) \
 				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-				-I$(CURDIR)/$(BUILD) \
-				-I/usr/local/include
+				-I$(CURDIR)/$(BUILD)
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 

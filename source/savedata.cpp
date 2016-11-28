@@ -1,40 +1,58 @@
 #include "savedata.h"
 
-SaveData::SaveData(const char* _saveFileName) {
+// MARK: Constants
+char SaveData::invInit[4][5] = {{1, 2, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0}};
+
+char SaveData::healthInit[2] = {100, 100};
+
+// MARK: Class initialiser
+SaveData::SaveData(const char* saveFileName) {
 	sassert(nitroFSInit(NULL), "nitroFS failed to initialise when attempting to access the savefile");
-
-	this->saveFileName = &_saveFileName;
-
+	//nitroFSInit(NULL);
 	// Open the file in read+update mode (will never over-write)
-	this->saveFile = fopen(this->saveFileName,"r+");
+	this->saveFile = fopen(saveFileName,"r+");
 	if(saveFile == NULL) {				// fopen returns NULL if the file does not exist for r+ mode
-		// Open the file in write+update mode (will always over-write)
-		this->saveFile = fopen(this->saveFileName,"w+");
 		fclose(this->saveFile);	
 		// MARK: New Game
-		this->inv = { { 1, 2, 0, 0, 0 },	// Initialise backpack, contains item IDs 1 and 2 which will be a really bad weapon and an apple probably
-				{ 0, 0, 0, 0, 0},
-				{ 0, 0, 0, 0, 0},
-				{ 0, 0, 0, 0, 0}};
-		this->curItem = MathVector2D<char> { 0, 0};
-		this->health = { 100, 100 };		// Start with 100 max health and have all of it
+		// Initialise the inventory
+		for(int x = 0; x < 4; x++) {
+			for(int y = 0; y < 5; y++) {
+				this->inv[x][y] = invInit[x][y];
+			}
+		}
+		this->curItem.x = 0; 
+		this->curItem.y = 0;
+		// Initialise the health
+		for(int x = 0; x < 2; x++) {
+			this->health[x] = healthInit[x];
+		}
 		this->currentMap = 1;			// Start on first map
-		this->playerPos = MathVector3D<int32> { floattof32(0.0f), floattof32(1.0f), floattof32(0.0f); };
+		this->playerPos.x = floattof32(0.0f);
+		this->playerPos.y = floattof32(1.0f);
+		this->playerPos.z = floattof32(0.0f);
 		// Save the created data
-		this->Save;
+		saveSaveData(*this, saveFileName);
 	} else {
-
-		// MARK: Load
-		//this.Load;
+		fclose(this->saveFile);
+		loadSaveData(*this, saveFileName);
 	}
 }
 
-bool SaveData::Save() {
-	// Make sure nitroFS is still initialised
-	sassert(nitroFSInit(NULL), "nitroFS failed to initialise when attempting to save data.");
-	{
-		const char* tempChar = &this->saveFileName;
-		std::ofstream tempOfStream(tempChar, ios::binary);
-		tempOfStream.write((char *)&this, sizeof(this));
-	}
+void saveSaveData(SaveData sd, const char * filename) {
+	sassert(nitroFSInit(NULL), "nitroFS failed to initialise when attempting to serialise the saveData object.");
+	std::ofstream ofs(filename);
+	cereal::BinaryOutputArchive ar(ofs);
+
+	ar(sd);
+}
+
+void loadSaveData(SaveData sd, const char * filename) {
+	sassert(nitroFSInit(NULL), "nitroFS failed to initialise when attempting to deserialise the saveData object.");
+	std::ifstream ifs(filename);
+	cereal::BinaryInputArchive ar(ifs);
+
+	ar(sd);
 }

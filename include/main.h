@@ -32,10 +32,11 @@
 #include "types.h"
 #include "button.h"
 #include "splash.h"
+#include "savedata.h"
 
 // Functions Referances
 void mainMenu();
-void startGame(char* save);
+void startGame(const char* save);
 void updateGameTime();
 void incrementTime();
 void getSaveName();
