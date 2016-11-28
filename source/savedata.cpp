@@ -10,7 +10,7 @@ char SaveData::healthInit[2] = {100, 100};
 
 // MARK: Class initialiser
 SaveData::SaveData(const char* saveFileName) {
-	sassert(nitroFSInit(NULL), "nitroFS failed to initialise when attempting to access the savefile");
+	sassert(!nitroFSInit(NULL), "nitroFS failed to initialise when attempting to access the savefile");
 	//nitroFSInit(NULL);
 	// Open the file in read+update mode (will never over-write)
 	this->saveFile = fopen(saveFileName,"r+");
@@ -42,7 +42,7 @@ SaveData::SaveData(const char* saveFileName) {
 }
 
 void saveSaveData(SaveData sd, const char * filename) {
-	sassert(nitroFSInit(NULL), "nitroFS failed to initialise when attempting to serialise the saveData object.");
+	sassert(!nitroFSInit(NULL), "nitroFS failed to initialise when attempting to serialise the saveData object.");
 	std::ofstream ofs(filename);
 	cereal::BinaryOutputArchive ar(ofs);
 
@@ -50,7 +50,7 @@ void saveSaveData(SaveData sd, const char * filename) {
 }
 
 void loadSaveData(SaveData sd, const char * filename) {
-	sassert(nitroFSInit(NULL), "nitroFS failed to initialise when attempting to deserialise the saveData object.");
+	sassert(!nitroFSInit(NULL), "nitroFS failed to initialise when attempting to deserialise the saveData object.");
 	std::ifstream ifs(filename);
 	cereal::BinaryInputArchive ar(ifs);
 
