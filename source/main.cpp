@@ -59,7 +59,7 @@ void mainMenu(void) {
 	int bg3 = bgInit(3,			// Layer 3
 			BgType_Bmp16,		// 16 colour bitmap
 			BgSize_B16_256x256,	// Max size is bigger than screen
-			1,			// Map base (16k offset)
+			2,			// Map base (16k offset)
 			0);			// Tile base (unused 16k offset)
 
 	/* * * * * * * * * * * * * * * * * * * * * *
@@ -79,23 +79,25 @@ void mainMenu(void) {
 
 	// Place main bg 3 at the origin, which is the upper left corner.
 	REG_BG3X = 0;
-	REG_BG3Y = 1;
+	REG_BG3Y = 2;				// Because the map base is 2, this should be 2
        	
 	// SUBMARK: Init Sub Screen Background 3
 	int bg3sub = bgInitSub(3,		// Layer (or priority) 3
 			BgType_Bmp16,		// 16 colour bitmap
 			BgSize_B16_256x256,
-			1,			// Map base (16k offset)
+			2,			// Map base (16k offset)
 			0);			// Tile base (unused 16k offset)
 
 	REG_BG3PA_SUB = 1 << 8;
 	REG_BG3PB_SUB = 0;
 	REG_BG3PC_SUB = 0;
 	REG_BG3PD_SUB = 1 << 8;
+	
 	REG_BG3X_SUB = 0;
-	REG_BG3Y_SUB = 1;
+	REG_BG3Y_SUB = 2;
 
 	bgUpdate();
+
 	// SUBMARK: Display Main Screen Background 3
 	/* * * * * * * * * * * * * * * * * * * * * * *
 	 * Use the direct memory access (DMA) copy   *
@@ -114,17 +116,18 @@ void mainMenu(void) {
 			bgGetGfxPtr(bg3sub),
 			mmSubScreenBitmapLen);
 
+	// SUBMARK: Setup Sprites and Interaction
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
-
-	// SUBMARK: Setup Sprites and Interaction	
 	// Initilaise a new splash
 	Splash touchSplash(0);
+
 	// Variables to store touches
 	touchPosition touch;
+	MathVector2D<int> tPos;
 	int16 sTouchX, sTouchY;
 
 	bool tBreak=false;
-	while(tBreak==false) {			// Wait for input
+	while(tBreak==false) {				// Wait for input
 		// Update clock
 		// showClock(true, &topScreen);
 		// Read the button states
@@ -133,16 +136,15 @@ void mainMenu(void) {
 		// If the screen was touched
 		if(keysDown() & KEY_TOUCH) {
 			touchRead(&touch);
-			sTouchX = touch.px;	// Save X coord
-			sTouchY = touch.py;	// Save Y coord
-			mmEffectEx(&buttonpush);// Play button push sound effect
-			tBreak=true;		// Exit next loop
+			sTouchX = touch.px;		// Save X coord
+			sTouchY = touch.py;		// Save Y coord
+			mmEffectEx(&buttonpush);	// Play button push sound effect
+			tBreak=true;			// Exit next loop
 		}
 	}
-	MathVector2D<int> tPos;
 	tPos.x = sTouchX;
 	tPos.y = sTouchY;
-	touchSplash.Animate(tPos, 2);		// Loop splash animation two times
+	touchSplash.Animate(tPos, 2);			// Loop splash animation two times
 
 	// SUBMARK: Have a button because we can... but we couldnt make the button say anything... because we cant
 	MathVector2D<int> b1Pos;
@@ -152,13 +154,14 @@ void mainMenu(void) {
 	b1Pos.x = 1.0; 
 	b1Pos.y = 1.0;
 
-	Button startB(1,			// oamId
-			1,			// Affine Tranform ID
-			b1Pos,			// Position
-			b1Sca);			// Scale
-	
+	Button startB(1,				// oamId
+			1,				// Affine Tranform ID
+			b1Pos,				// Position
+			b1Sca);				// Scale
 	swiWaitForVBlank();
 	oamUpdate(&oamMain);
+
+	// SUBMARK: Wait
 	bool start = false;
 	touchPosition atouch;
 	while(start == false) {
@@ -168,7 +171,7 @@ void mainMenu(void) {
 			tPos.x = atouch.px;
 			tPos.y = atouch.py;
 			touchSplash.Animate(tPos, 1);
-			start = startB.CheckTouch(atouch);		// Clean this up to accept MathVector2D<int> rather than touchPosition
+			start = startB.CheckTouch(atouch);	// Clean this up to accept MathVector2D<int> rather than touchPosition
 		}
 	}
 
@@ -181,8 +184,8 @@ void mainMenu(void) {
 	oamUpdate(&oamMain);
 
 	// Scale the main screen background to fit keyboard
-	//bgSetScale(bg3, intToFixed(1, 8), floatToFixed(0.5, 8));
 	bgHide(bg3);
+	swiWaitForVBlank();
 	bgUpdate();
 
 	// Change top screen to blank parchament
