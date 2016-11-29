@@ -41,6 +41,16 @@ SaveData::SaveData(const char* saveFileName) {
 	}
 }
 
+// MARK: SaveData Operator Overloads
+bool SaveData::operator== (const SaveData sd1) {
+	if((sd1.currentMap == currentMap) && (playerPos == sd1.playerPos) && (inv == sd1.inv) && (curItem == sd1.curItem) && (sd1.health[0] == health[0]) && (sd1.health[1] == health[1])) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// MARK: Save and Load Functions
 void saveSaveData(SaveData sd, const char * filename) {
 	sassert(!nitroFSInit(NULL), "nitroFS failed to initialise when attempting to serialise the saveData object.");
 	std::ofstream ofs(filename);

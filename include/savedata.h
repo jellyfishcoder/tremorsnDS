@@ -16,11 +16,14 @@
 class SaveData {
 	private:
 		friend class cereal::access;
-		friend std::ostream & operator<<(std::ostream &os, const SaveData &sd);
 
+		friend std::ostream & operator<<(std::ostream &os, const SaveData &sd);
+		
 		friend void saveSaveData(SaveData sd, const char * filename);
 		friend void loadSaveData(SaveData sd, const char * filename);
 
+		bool operator== (const SaveData sd1);
+		
 		template <class Archive>
 		void serialize(Archive & ar) {
 			ar(currentMap, playerPos, inv, curItem, health);
@@ -35,7 +38,7 @@ class SaveData {
 		char inv[4][5];				// byte array holding player inventory
 		MathVector2D<char> curItem;		// byte math vector holding currently equipted item
 		int health[2];				// int array with [1] holding current health and [2] holding max health
-		void init(const SaveData & other); 
+		void init(const SaveData &other); 
 		
 		SaveData(const char* _saveFileName);	// initialiser for load and create
 
@@ -48,6 +51,7 @@ class SaveData {
 //std::ostream & operator<<(std::ostream &os, const SaveData &sd) {
 //	return os << sd.currentMap << sd.playerPos.x << sd.playerPos.y << sd.playerPos.z << sd.inv << sd.curItem.x << sd.curItem.y << sd.health;
 //}
+
 
 void saveSaveData(SaveData sd, const char * filename);
 void loadSaveData(SaveData sd, const char * filename);
