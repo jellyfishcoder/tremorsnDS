@@ -16,10 +16,8 @@ Button::Button(int _oamId, int _affId, MathVector2D<int> _position, MathVector2D
 
 	// Scale the sprite
 	oamRotateScale(&oamMain,
-			this->affId,					// Affine matrix ID
-			0,						// No angular rotation
-			//intToFixed(1, 8),
-			//intToFixed(1, 8));
+			this->affId,		// Affine matrix ID
+			0,			// No angular rotation
 			((int)((this->scale.x) * (float)(1 << 8))),	// Create a fixed point x scale value from the float
 			((int)((this->scale.y) * (float)(1 << 8))));	// Create a fixed point y scale value from the float
 

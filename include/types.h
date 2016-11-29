@@ -30,6 +30,13 @@ template <class T>
 			}
 	};
 
+// MARK: MathVector2D Initialiser
+template<class T>
+	MathVector2D<T>::MathVector2D(T x, T y) {
+		this->x = x;
+		this->y = y;
+	};
+
 // MARK: MathVector2D Operators
 template <class T>
 	bool MathVector2D<T>::operator==(MathVector2D<T> other) const {
@@ -56,6 +63,14 @@ template <class T>
 			void serialize( Archive & ar ) {
 				ar(x, y, z);
 			}
+	};
+
+// MARK: MathVector3D Initialiser
+template<class T>
+	MathVector3D<T>::MathVector3D(T x, T y, T z) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
 	};
 
 // MARK: MathVector3D Operators
