@@ -147,12 +147,8 @@ void mainMenu(void) {
 	touchSplash.Animate(tPos, 2);			// Loop splash animation two times
 
 	// SUBMARK: Have a button because we can... but we couldnt make the button say anything... because we cant
-	MathVector2D<int> b1Pos;
-	b1Pos.x = 128;
-	b1Pos.y = 96;
-	MathVector2D<float> b1Sca;
-	b1Pos.x = 1.0; 
-	b1Pos.y = 1.0;
+	MathVector2D<int> b1Pos(128, 96);
+	MathVector2D<float> b1Sca(1.0, 1.0);
 
 	Button startB(1,				// oamId
 			1,				// Affine Tranform ID
