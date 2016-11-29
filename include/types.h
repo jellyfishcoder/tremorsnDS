@@ -40,7 +40,7 @@ template <class T>
 		}
 	}
 
-// MARK: Three Dimensional Vector
+// MARK: MathVector3D Structure
 template <class T>
 	struct MathVector3D {
 		bool operator== (const MathVector3D<T> other) const;
@@ -67,16 +67,5 @@ template<class T>
 			return false;
 		}
 	}
-
-/*
-struct SaveSlot {
-	int curMap;
-	MathVector3D<float> playerPos;
-	bool discMaps[10];
-	int maxHealth;
-	int curHealth;
-	int maxAura;
-	int curAura;
-};*/
 
 #endif 
