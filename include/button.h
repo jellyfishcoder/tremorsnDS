@@ -8,15 +8,15 @@
 
 class Button {
 	protected:
-		MathVector2D<int> position;	// Upper left corner position
+		MathVector2D<int> position;	// Position
 		u16* gfx_mem;			// Sprite graphics memory pointer
 		u8* frame_gfx;			// Frame graphics memory pointer
 		int oamId;			// oamId
 		int affId;			// affId (for affine transform matrix)
-		MathVector2D<float> scale;	// Float representation of the scale (automatically changed to 8 bit fixed)
+		MathVector2D<int> scale;	// Scale
 		void init(const Button & other);
 	public:
-		Button(int _oamId, int _affId, MathVector2D<int> _position, MathVector2D<float> _size);
+		Button(int _oamId, int _affId, MathVector2D<int> _position, MathVector2D<int> _scale);
 		bool CheckTouch(touchPosition _touch);
 		void Suicide();
 		void Update();
