@@ -41,5 +41,5 @@ void updateGameTime();
 void incrementTime();
 void getSaveName();
 void keyPress(int c);
-
+void hideKeyboardW(int splashID);
 #endif

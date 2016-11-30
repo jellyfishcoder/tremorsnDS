@@ -4,6 +4,7 @@
 
 // Variables to store touch positions
 touchPosition touch;
+MathVector2D<int> touchPos;
 int16 touchX, touchY;
 
 PrintConsole* pcSub;
@@ -12,6 +13,8 @@ PrintConsole* pcMain;
 int nameEntryCurLen = 0;
 bool nameEntryDone = false;
 char nameEntry[NAME_ENTRY_MAX_LEN];
+
+bool tBreak;
 
 u32 inGameTime = 0;
 
@@ -124,10 +127,9 @@ void mainMenu(void) {
 	// Variables to store touches
 	touchPosition touch;
 	MathVector2D<int> tPos;
-	int16 sTouchX, sTouchY;
 
-	bool tBreak=false;
-	while(tBreak==false) {				// Wait for input
+	tBreak=false;
+	while(!tBreak) {				// Wait for input
 		// Update clock
 		// showClock(true, &topScreen);
 		// Read the button states
@@ -136,14 +138,14 @@ void mainMenu(void) {
 		// If the screen was touched
 		if(keysDown() & KEY_TOUCH) {
 			touchRead(&touch);
-			sTouchX = touch.px;		// Save X coord
-			sTouchY = touch.py;		// Save Y coord
+			touchX = touch.px;		// Save X coord
+			touchY = touch.py;		// Save Y coord
 			mmEffectEx(&buttonpush);	// Play button push sound effect
 			tBreak=true;			// Exit next loop
 		}
 	}
-	tPos.x = sTouchX;
-	tPos.y = sTouchY;
+	tPos.x = touchX;
+	tPos.y = touchY;
 	touchSplash.Animate(tPos, 2);			// Loop splash animation two times
 
 	// SUBMARK: Have a button because we can... but we couldnt make the button say anything... because we cant
@@ -196,12 +198,17 @@ void mainMenu(void) {
 			0,			// Background layer 0
 			BgType_Text4bpp,	// Background type
 			BgSize_T_256x256,	// Background size for mem bank allocation
-			1,			// Map base
+			2,			// Map base
 			0,			// Tile base
 			false,			// On subscreen
 			true);			// Load graphics
-
-	iprintf("Please input desired name or name used in previous save");
+	consoleSetWindow(pcSub,
+			4,			// Left corner X offset
+			4,			// Left corner Y offset
+			24,			// Width
+			32);			// Height
+	// Set text to black and ask for name
+	iprintf("\x1b[30;0mType name to load or create:");
 
 	// Create the keyboard
 	Keyboard* kb = keyboardInit(NULL,
@@ -275,18 +282,22 @@ void updateGameTime() {
 void keyPress(int c) {
 	consoleSelect(pcMain);
 	switch(c) {
-		case NOKEY:			// Null char
+		case NOKEY:				// Null char
 			break;
-		case DVK_BACKSPACE:		// Backspace
-			nameEntryCurLen--;
-			nameEntry[nameEntryCurLen] = 0;
-			consoleClear();
+		case DVK_BACKSPACE:			// Backspace
+			if(nameEntryCurLen > 0) {
+				nameEntryCurLen--;
+				nameEntry[nameEntryCurLen] = 0;
+			}
 			break;
-		case DVK_ENTER:			// Entre
+		case DVK_ENTER:				// Entre
 			nameEntryDone = true;
 			break;
-		case DVK_TAB:			// Kinda like entre
+		case DVK_TAB:				// Kinda like entre
 			nameEntryDone = true;
+			break;
+		case DVK_FOLD:				// Hide keyboard
+			hideKeyboardW(0);
 			break;
 		default:
 			if(nameEntryCurLen < NAME_ENTRY_MAX_LEN) {
@@ -297,8 +308,11 @@ void keyPress(int c) {
 				nameEntry[nameEntryCurLen] = c;
 			}
 	}
-	consoleClear();
-	iprintf("%s",&nameEntry);
+	if(nameEntryCurLen == 0) {
+		iprintf("\x1b[3;4H\x1b[2KEntre Name");
+	} else {
+		iprintf("\x1b[3;4H\x1b[2K%s_", &nameEntry);	// Go to line 6 column 6 and clear the whole line then print what has been typed and a blinking bar
+	}
 }
 
 // MARK: Useless Function which should be integrated into main code later
@@ -306,5 +320,33 @@ void getSaveName() {
 	while(nameEntryDone == false) {
 		keyboardUpdate();
 		swiWaitForVBlank();
+		scanKeys();
+		if(keysHeld() & KEY_DOWN) {
+			hideKeyboardW(0);
+		}
 	}
+}
+
+// MARK: Hide keyboard until up arrow or screen touch
+void hideKeyboardW(int splashID) {
+	keyboardHide();
+	bool toBreak = false;
+	Splash hkSplash(splashID);
+	touchPosition hktPos;
+	MathVector2D<int> hktPMV;
+
+	while(toBreak == false) {
+		scanKeys();
+		if(keysDown() & KEY_UP) {
+			toBreak = true;
+		} else if(keysDown() & KEY_TOUCH) {
+			touchRead(&hktPos);
+			hktPMV.x = hktPos.px;
+			hktPMV.y = hktPos.py;
+			hkSplash.Animate(hktPMV, 1);
+			hkSplash.Suicide();
+			toBreak = true;
+		}
+	}
+	keyboardShow();
 }
