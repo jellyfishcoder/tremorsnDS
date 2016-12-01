@@ -33,6 +33,7 @@
 #include "button.h"
 #include "splash.h"
 #include "savedata.h"
+#include "items.h"
 
 // Functions Referances
 void mainMenu();

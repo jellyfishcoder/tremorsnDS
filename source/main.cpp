@@ -241,12 +241,12 @@ void startGame(const char* save) {
 	
 	initGL();
 	// Start time system
-	//timerStart(0,				// Timer 0
-	//		ClockDivider_1024,	// 327,284.98 ticks per second
-	//		327285,			// About one overflow per second
-	//		incrementTime);	// Increment timer
+	timerStart(0,				// Timer 0
+			ClockDivider_1024,	// 327,284.98 ticks per second
+			327285,			// About one overflow per second
+			incrementTime);	// Increment timer
 	
-	sassert(true == false, "Worked, just this is all");
+	
 }
 
 // MARK: Increment the time
