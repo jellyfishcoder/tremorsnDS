@@ -238,8 +238,8 @@ void mainMenu(void) {
 void startGame(const char* save) {
 	// Create new or load save file
 	SaveData saveFile(save);
-	
 	initGL();
+	initInv();
 	// Start time system
 	timerStart(0,				// Timer 0
 			ClockDivider_1024,	// 327,284.98 ticks per second

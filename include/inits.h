@@ -11,13 +11,13 @@
 
 #include "sprite.h"
 #include "types.h"
-#include "items.h"
+//#include "items.h"
 
 void initHeader();
 void initVideo(int vidMode);
 void initSoundbank(void);
 void initMap(int map);
 void initGL();
-void initItems();
+//void initInv();
 
 #endif

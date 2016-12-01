@@ -119,26 +119,6 @@ void initGL() {
 			0.0, -1.0, 0.0);	// Up
 }
 
-// MARK: Initialise Items
-void initItems() {
-	// SUBMARK: Basic Sword (id 1)
-	Stat bsSwordStat;
-	bsSwordStat.damage = 1;			// Really, its worse than flinging bs as a bioweapon at your enemy...
-	Item bsSword(bsSwordStat, CONTACT, 1);
-	// SUBMARK: Apple (id 2)
-	Stat appleStat;
-	appleStat.recovery = 10;		// Recovers 1/10 of starting health, decent but not too OP
-	Item apple(appleStat, H_RECOVERY, 2);
-	// SUBMARK: Mysterious Drink (id 3)
-	Stat mysDrinkStat;
-	mysDrinkStat.recovery = -75;		// What type of idiot drinks a mysterious drink in a clearly labeled bottle marked poisen
-	Item mysDrink(mysDrinkStat, H_RECOVERY, 3);
-	// SUBMARK: Stabby Knife (id 4)
-	Stat stabbyKnifeStat;
-	stabbyKnifeStat.damage = 5;		// Its a stabby knife, not a bs sword
-	Item stabbyKnife(stabbyKnifeStat, CONTACT, 4);
-	// SUBMARK: Infinite Bow (id 5) (only infinite until I decide to make it have an ammo system, but it doesnt even display yet so it doesnt matter)
-	Stat infiniteBowStat;
-	infiniteBowStat.damage = 3;		// Most basic ranged weapon, other than the hand cannon, which shoots bs in a flinging motion and is not even real
-	Item infiniteBow(infiniteBowStat, RANGED, 5);
-}
+
+// MARK: Initialise Items in OAM
+void initItemOam() {} 
