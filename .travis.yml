@@ -10,13 +10,11 @@ before_install:
 install:
         - sudo apt-get install perl
         # devkitARM Installation
-        - mkdir devkitARM
-        - cd devkitARM
+        - mkdir ${DEVKITPRO}
+        - cd ${DEVKITPRO}
         - wget 'https://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitARMupdate.pl'
         - perl -- devkitARMupdate.pl
-        - export DEVKITPRO="${pwd}"
-        - export DEVKITARM="$(DEVKITARM)/devkitARM"
-        - cd ../
+        - cd ~/
 
 script:
         - make
