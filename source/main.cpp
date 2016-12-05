@@ -1,23 +1,42 @@
 // Include main header
 #include "main.h"
+#include "items.h"
 #define NAME_ENTRY_MAX_LEN 16
 
-// Variables to store touch positions
+// MARK: Touch Variables
 touchPosition touch;
 MathVector2D<int> touchPos;
 int16 touchX, touchY;
 
+// MARK: Console Variables
 PrintConsole* pcSub;
 PrintConsole* pcMain; 
 
+// MARK: Name Entry Variables
 int nameEntryCurLen = 0;
 bool nameEntryDone = false;
 char nameEntry[NAME_ENTRY_MAX_LEN];
-
 bool tBreak;
 
+// MARK: Useless Variables
 u32 inGameTime = 0;
 
+// MARK: Item Constants
+// SUBMARK: Basic Sword (id 1)
+//const Item bsSword(1, CONTACT, bsSwordTiles, bsSwordTilesLen, bsSwordPal, bsSwordPalLen, 1);	// Really, its worse than flinging bs as a bioweapon at your enemy...
+// SUBMARK: Apple (id 2)
+//const Item apple(10, H_RECOVERY, appleTiles, appleTilesLen, applePal, applePalLen, 2);	// Decent health recovery
+// SUBMARK: Mysterious Drink (id 3)
+//const Item mysDrink(75, H_UNRECOV, mysDrinkTiles, mysDrinkTilesLen, mysDrinkPal, mysDrinkPalLen, 3);
+// SUBMARK: Stabby Knife (id 4)
+//const Item stabbyKnife(5, CONTACT, stabbyKnifeTiles, stabbyKnifeTilesLen, stabbyKnifePal, stabbyKnifePalLen, 4);
+// SUBMARK: Infinite Bow (id 5) (only infinite until I decide to make it have an ammo system, but it doesnt even display yet so it doesnt matter)
+//const Item infiniteBow(3, RANGED, 5);
+
+// SUBMARK: IDK (id 6)
+const Item duoRod(20, CONTACT, lgDuoRodTiles, lgDuoRodTilesLen, lgDuoRodPal, lgDuoRodPalLen);
+
+// MARK: main
 int main(void) {
 	// Turn on 2D graphics core
 	powerOn(POWER_ALL_2D);
@@ -267,7 +286,7 @@ void startGame(const char* save) {
 		mmSubScreenBitmap,
 		bgGetGfxPtr(bg3sub),
 		mmSubScreenBitmapLen);
-
+	
 	// Restart/start the sub Oam
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
@@ -275,6 +294,10 @@ void startGame(const char* save) {
 	windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
 	oamWindowEnable(&oamSub, WINDOW_OBJ);
 
+	// Initialise the grid
+	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
+	MathVector2D<int> grid1 (16, 16);
+	Invslot(1, duoRod, grid1);	// Need an oamId management system
 }
 
 // MARK: Increment the time

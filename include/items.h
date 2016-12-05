@@ -2,6 +2,7 @@
 #include <map>
 #include "types.h" 
 #include "invslot.h"
+#include "main.h"
 
 #include "lgDuoRod.h"
 
@@ -51,8 +52,4 @@ class Item {
 		
 };
 
-const extern Item bsSword;
-//const extern Item apple;
-//const extern Item stabbyKnife;
-//const extern Item infiniteBow; 
 #endif
