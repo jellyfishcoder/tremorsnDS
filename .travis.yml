@@ -1,0 +1,22 @@
+language:
+        - cpp
+
+compiler:
+        - clang
+
+before_install:
+        - sudo apt-get update
+
+install:
+        - sudo apt-get install perl
+        # devkitARM Installation
+        - wget 'https://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitARMupdate.pl'
+        - mkdir devkitARM
+        - cd devkitARM
+        - perl -- devkitARMupdate.pl
+        - export DEVKITPRO="${pwd}"
+        - export DEVKITARM="$(DEVKITARM)/devkitARM"
+        - cd ../
+
+script:
+        - make
