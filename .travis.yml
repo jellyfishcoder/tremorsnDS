@@ -10,6 +10,7 @@ before_install:
 install:
         # Dependancies
         - sudo apt-get install perl
+        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         - sudo apt-get install glibc-2.13-1
         # devkitARM Installation
         - cd ~/
