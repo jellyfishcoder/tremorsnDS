@@ -239,14 +239,42 @@ void startGame(const char* save) {
 	// Create new or load save file
 	SaveData saveFile(save);
 	initGL();
-	initInv();
+
 	// Start time system
 	timerStart(0,				// Timer 0
 			ClockDivider_1024,	// 327,284.98 ticks per second
 			327285,			// About one overflow per second
 			incrementTime);	// Increment timer
-	
-	
+
+	// Copy a blank parchment background to the subscreen
+	int bg3sub = bgInitSub(3,
+			BgType_Bmp16,
+			BgSize_256x256,
+			2,
+			0);
+	REG_BG3PA_SUB = 1 << 8;
+	REG_BG3PB_SUB = 0;
+	REG_BG3PC_SUB = 0;
+	REG_BG3PD_SUB = 1 << 8;
+
+	REG_BG3X_SUB = 0;
+	REG_BG3Y_SUB = 2;
+
+	bgUpdate();
+
+	// Copy the blank parchment graphics to the gfx memory
+	dmaCopyHalfWords(3,
+		mmSubScreenBitmap,
+		bgGetGfxPtr(bg3sub),
+		mmSubScreenBitmapLen);
+
+	// Restart/start the sub Oam
+	oamInit(&oamSub, SpriteMapping_1D_128, false);
+
+	// Enable a window to hold the sprite grid
+	windowSetBoundsSub(OBJ_WINDOW, 0, 0, 256, 160);
+	oamWindowEnable(&oamSub, WINDOW_OBJ);
+
 }
 
 // MARK: Increment the time

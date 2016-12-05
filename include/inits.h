@@ -18,6 +18,6 @@ void initVideo(int vidMode);
 void initSoundbank(void);
 void initMap(int map);
 void initGL();
-//void initInv();
+void initInv();
 
 #endif

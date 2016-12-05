@@ -1,6 +1,6 @@
 #include "items.h"
 
-Item::Item(unsigned int _stat, Type _type, unsigned short _ID) {
+Item::Item(unsigned int _stat, Type _type, const void* _img_src, uint32 _tile_len, void* pal_src, uint32 _pal_len) {
 	// Set item properties
 	switch(_type) {
 		case CONTACT:
@@ -24,36 +24,30 @@ Item::Item(unsigned int _stat, Type _type, unsigned short _ID) {
 			break;
 	}
 	this->type = _type;
-	this->ID = _ID;
+
+	this->tile_src = &_img_src;
+	this->tile_len = _tile_len;
+	
+	this->pal_src = _pal_src;
+	this->pal_len = _pal_len;
 }
 
-void Item::putInOam(const void* _img_src, void* _pal_src, uint32 _tile_len, uint32 _pal_len, int _oamId) {
-	this->tile_src = &_img_src;	// Because a const anything in a class is the same for all class members, use a pointer to the const void pointer instead
-	this->pal_src = _pal_src;
-
-	this->gfx_mem = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_16Color);
-	this->tile_len = _tile_len;
-	this->pal_len = _pal_len;
-
-	this->oamId = _oamId;
-	
-	dmaCopyHalfWords(3, &(this->tile_src), this->gfx_mem, this->tile_len);
-	dmaCopyHalfWords(3, this->pal_src, &SPRITE_PALETTE[this->oamId * 16], this->pal_len);
+Item::Item() {
 }
 
 // MARK: Setup Items 
 
 // SUBMARK: Basic Sword (id 1)
-const Item bsSword(1, CONTACT, 1);	// Really, its worse than flinging bs as a bioweapon at your enemy...
+const Item bsSword(1, CONTACT, bsSwordTiles, bsSwordTilesLen, bsSwordPal, bsSwordPalLen, 1);	// Really, its worse than flinging bs as a bioweapon at your enemy...
 
 // SUBMARK: Apple (id 2)
-const Item apple(10, H_RECOVERY, 2);	// Decent health recovery
+const Item apple(10, H_RECOVERY, appleTiles, appleTilesLen, applePal, applePalLen, 2);	// Decent health recovery
 
 // SUBMARK: Mysterious Drink (id 3)
-const Item mysDrink(75, H_UNRECOV, 3);
+const Item mysDrink(75, H_UNRECOV, mysDrinkTiles, mysDrinkTilesLen, mysDrinkPal, mysDrinkPalLen, 3);
 
 // SUBMARK: Stabby Knife (id 4)
-const Item stabbyKnife(5, CONTACT, 4);
+const Item stabbyKnife(5, CONTACT, stabbyKnifeTiles, stabbyKnifeTilesLen, stabbyKnifePal, stabbyKnifePalLen, 4);
 
 // SUBMARK: Infinite Bow (id 5) (only infinite until I decide to make it have an ammo system, but it doesnt even display yet so it doesnt matter)
 const Item infiniteBow(3, RANGED, 5); 

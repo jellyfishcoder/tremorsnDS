@@ -117,8 +117,4 @@ void initGL() {
 	gluLookAt(0.0, 0.0, -3.0,		// Camera position
 			0.0, 0.0, 0.0,		// Look at
 			0.0, -1.0, 0.0);	// Up
-}
-
-
-// MARK: Initialise Items in OAM
-void initItemOam() {} 
+} 
