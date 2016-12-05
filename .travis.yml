@@ -10,7 +10,7 @@ before_install:
 install:
         # Dependancies
         - sudo apt-get install perl
-        - sudo apt-get install glib
+        - sudo apt-get install glibc-source
         # devkitARM Installation
         - cd ~/
         - mkdir ${DEVKITPRO}
