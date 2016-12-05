@@ -19,4 +19,5 @@ install:
         - cd ~/
 
 script:
+        - cd ~/jellyfishcoder/tremorsnDS
         - make
