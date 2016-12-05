@@ -8,17 +8,14 @@ before_install:
         - sudo apt-get update
 
 install:
-        - sudo echo $(pwd)
-        - sudo ls
-        - sudo ls ./*
         - sudo apt-get install perl
         # devkitARM Installation
+        - cd ~/
         - mkdir ${DEVKITPRO}
         - cd ${DEVKITPRO}
         - wget 'https://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitARMupdate.pl'
         - perl -- devkitARMupdate.pl
-        - cd ~/
 
 script:
-        - cd ~/jellyfishcoder/tremorsnDS
+        - cd ~/build/jellyfishcoder/tremorsnDS
         - make
