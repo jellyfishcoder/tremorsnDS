@@ -255,9 +255,9 @@ void mainMenu(void) {
 }
 
 void startGame(const char* save) {
-	// Create new or load save file
-	SaveData saveFile(save);
-	initGL();
+	// Create new or load save file (hangs system)
+	//SaveData saveFile(save);
+	//initGL(); (screws stuff up)
 
 	// Start time system
 	timerStart(0,				// Timer 0
@@ -297,7 +297,7 @@ void startGame(const char* save) {
 	// Initialise the grid
 	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
 	MathVector2D<int> grid1 (16, 16);
-	Invslot(1, duoRod, grid1);	// Need an oamId management system
+	Invslot(3, duoRod, grid1);	// Need an oamId management system
 }
 
 // MARK: Increment the time
