@@ -3,6 +3,8 @@
 #include "types.h" 
 #include "invslot.h"
 
+#include "lgDuoRod.h"
+
 #ifndef ITEMS_H
 #define ITEMS_H 
 
@@ -39,18 +41,18 @@ class Item {
 		const void** tile_src;				// Image source for dmaCopyHalfWords()
 		uint32 tile_len;
 		
-		void* pal_src;
+		const void** pal_src;
 		uint32 pal_len;
 
 		void init(const Item & other);
 	public:
-		Item(unsigned int _stat, Type _type, const void* _img_src, uint32 _tile_len, void* pal_src, uint32 _pal_len);
+		Item(unsigned int _stat, Type _type, const void* _img_src, uint32 _tile_len, const void* _pal_src, uint32 _pal_len);
 		Item();						// Needed for stuff
 		
 };
 
 const extern Item bsSword;
-const extern Item apple;
-const extern Item stabbyKnife;
-const extern Item infiniteBow; 
+//const extern Item apple;
+//const extern Item stabbyKnife;
+//const extern Item infiniteBow; 
 #endif

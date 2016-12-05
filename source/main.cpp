@@ -249,7 +249,7 @@ void startGame(const char* save) {
 	// Copy a blank parchment background to the subscreen
 	int bg3sub = bgInitSub(3,
 			BgType_Bmp16,
-			BgSize_256x256,
+			BgSize_B16_256x256,
 			2,
 			0);
 	REG_BG3PA_SUB = 1 << 8;
@@ -272,7 +272,7 @@ void startGame(const char* save) {
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
 	// Enable a window to hold the sprite grid
-	windowSetBoundsSub(OBJ_WINDOW, 0, 0, 256, 160);
+	windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
 	oamWindowEnable(&oamSub, WINDOW_OBJ);
 
 }
