@@ -8,6 +8,8 @@ before_install:
         - sudo apt-get update
 
 install:
+        - sudo ls
+        - sudo ls ./*
         - sudo apt-get install perl
         # devkitARM Installation
         - mkdir ${DEVKITPRO}
