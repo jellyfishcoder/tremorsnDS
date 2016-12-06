@@ -255,6 +255,7 @@ void mainMenu(void) {
 }
 
 void startGame(const char* save) {
+	lcdMainOnTop();
 	// Create new or load save file (hangs system)
 	//SaveData saveFile(save);
 	//initGL(); (screws stuff up)
@@ -265,7 +266,7 @@ void startGame(const char* save) {
 			327285,			// About one overflow per second
 			incrementTime);	// Increment timer
 
-	// Copy a blank parchment background to the subscreen
+	// Copy a blank parchment background to the main screen
 	int bg3sub = bgInitSub(3,
 			BgType_Bmp16,
 			BgSize_B16_256x256,
@@ -283,9 +284,9 @@ void startGame(const char* save) {
 
 	// Copy the blank parchment graphics to the gfx memory
 	dmaCopyHalfWords(3,
-		mmSubScreenBitmap,
+		mmMainScreenBitmap,
 		bgGetGfxPtr(bg3sub),
-		mmSubScreenBitmapLen);
+		mmMainScreenBitmapLen);
 	
 	// Restart/start the sub Oam
 	oamInit(&oamSub, SpriteMapping_1D_128, false);

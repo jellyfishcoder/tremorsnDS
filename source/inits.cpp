@@ -34,14 +34,18 @@ void initVideo(int vidMode) {
 			vramSetBankB(VRAM_B_TEXTURE_SLOT1);		// Map bank B to 3d texture slot 1
 			vramSetBankC(VRAM_C_SUB_BG_0x06200000);		// Map bank C to sub engine background slot 0
 			vramSetBankD(VRAM_D_SUB_SPRITE);		// Map bank D to sub sprite graphics slot 0
-			vramSetBankE(VRAM_E_MAIN_SPRITE);		// Map bank E to main sprite graphics slot 0 first part of first half
-			vramSetBankF(VRAM_F_TEX_PALETTE_SLOT0);		// Map bank F to 3d texture palette slot 1
-			vramSetBankG(VRAM_G_MAIN_SPRITE_0x06404000);	// Map bank G to main sprite graphics slot 0 second part of first half
-
+			vramSetBankE(VRAM_E_TEX_PALETTE);
+			vramSetBankG(VRAM_G_MAIN_SPRITE_0x06404000);	// Map bank G to main sprite graphics slot 0 second part of first ha
+		
 			// Set the video modes
-			videoSetMode(MODE_0_3D);
+			videoSetMode(MODE_0_3D |
+					DISPLAY_BG3_ACTIVE
+				);
 			videoSetModeSub(MODE_5_2D |
-					DISPLAY_BG3_ACTIVE);
+					DISPLAY_BG3_ACTIVE
+				);
+			//sassert(videoGetMode()==MODE_0_3D, "Video mode did not properly set main when initVideo(2) was called.");
+			sassert(videoGetModeSub()==MODE_5_2D, "Video mode did not properly set sub when initVideo(2) was called.");
 			break;
 		/* 2D graphics on both screens with text layer
 		case 3:
