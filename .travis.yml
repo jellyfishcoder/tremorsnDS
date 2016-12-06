@@ -6,7 +6,10 @@ compiler:
 
 before_install:
         - sudo apt-get update
-
+        # Fix stuffs
+        - sudo cd /usr/lib/x86_64-linux-gnu/
+        - sudo mv libstdc++.so.6 libstdc++.so.6.orig
+        - sudo ln -s /usr/lib/libstdc++.so.6.0.14 libstdc++.so.6
 install:
         # Dependancies
         - sudo apt-get install perl
