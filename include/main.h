@@ -33,6 +33,7 @@
 #include "button.h"
 #include "splash.h"
 #include "savedata.h"
+#include "items.h"
 
 // Functions Referances
 void mainMenu();
@@ -42,4 +43,7 @@ void incrementTime();
 void getSaveName();
 void keyPress(int c);
 void hideKeyboardW(int splashID);
+
+// Externs
+//const Item duoRod;
 #endif

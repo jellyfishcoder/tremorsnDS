@@ -1,23 +1,42 @@
 // Include main header
 #include "main.h"
+#include "items.h"
 #define NAME_ENTRY_MAX_LEN 16
 
-// Variables to store touch positions
+// MARK: Touch Variables
 touchPosition touch;
 MathVector2D<int> touchPos;
 int16 touchX, touchY;
 
+// MARK: Console Variables
 PrintConsole* pcSub;
 PrintConsole* pcMain; 
 
+// MARK: Name Entry Variables
 int nameEntryCurLen = 0;
 bool nameEntryDone = false;
 char nameEntry[NAME_ENTRY_MAX_LEN];
-
 bool tBreak;
 
+// MARK: Useless Variables
 u32 inGameTime = 0;
 
+// MARK: Item Constants
+// SUBMARK: Basic Sword (id 1)
+//const Item bsSword(1, CONTACT, bsSwordTiles, bsSwordTilesLen, bsSwordPal, bsSwordPalLen, 1);	// Really, its worse than flinging bs as a bioweapon at your enemy...
+// SUBMARK: Apple (id 2)
+//const Item apple(10, H_RECOVERY, appleTiles, appleTilesLen, applePal, applePalLen, 2);	// Decent health recovery
+// SUBMARK: Mysterious Drink (id 3)
+//const Item mysDrink(75, H_UNRECOV, mysDrinkTiles, mysDrinkTilesLen, mysDrinkPal, mysDrinkPalLen, 3);
+// SUBMARK: Stabby Knife (id 4)
+//const Item stabbyKnife(5, CONTACT, stabbyKnifeTiles, stabbyKnifeTilesLen, stabbyKnifePal, stabbyKnifePalLen, 4);
+// SUBMARK: Infinite Bow (id 5) (only infinite until I decide to make it have an ammo system, but it doesnt even display yet so it doesnt matter)
+//const Item infiniteBow(3, RANGED, 5);
+
+// SUBMARK: IDK (id 6)
+const Item duoRod(20, CONTACT, lgDuoRodTiles, lgDuoRodTilesLen, lgDuoRodPal, lgDuoRodPalLen);
+
+// MARK: main
 int main(void) {
 	// Turn on 2D graphics core
 	powerOn(POWER_ALL_2D);
@@ -236,17 +255,51 @@ void mainMenu(void) {
 }
 
 void startGame(const char* save) {
-	// Create new or load save file
-	SaveData saveFile(save);
-	
-	initGL();
+	lcdMainOnTop();
+	// Create new or load save file (hangs system)
+	//SaveData saveFile(save);
+	//initGL(); (screws stuff up)
+
 	// Start time system
-	//timerStart(0,				// Timer 0
-	//		ClockDivider_1024,	// 327,284.98 ticks per second
-	//		327285,			// About one overflow per second
-	//		incrementTime);	// Increment timer
+	timerStart(0,				// Timer 0
+			ClockDivider_1024,	// 327,284.98 ticks per second
+			327285,			// About one overflow per second
+			incrementTime);	// Increment timer
+
+	// Copy a blank parchment background to the main screen
+	int bg3sub = bgInitSub(3,
+			BgType_Bmp16,
+			BgSize_B16_256x256,
+			2,
+			0);
+	REG_BG3PA_SUB = 1 << 8;
+	REG_BG3PB_SUB = 0;
+	REG_BG3PC_SUB = 0;
+	REG_BG3PD_SUB = 1 << 8;
+
+	REG_BG3X_SUB = 0;
+	REG_BG3Y_SUB = 2;
+
+	bgUpdate();
+
+	// Copy the blank parchment graphics to the gfx memory
+	dmaCopyHalfWords(3,
+		mmMainScreenBitmap,
+		bgGetGfxPtr(bg3sub),
+		mmMainScreenBitmapLen);
 	
-	sassert(true == false, "Worked, just this is all");
+	// Restart/start the sub Oam
+	swiWaitForVBlank();
+	oamInit(&oamSub, SpriteMapping_1D_32, false);
+	
+	// Enable a window to hold the sprite grid
+	//windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
+	//oamWindowEnable(&oamSub, WINDOW_OBJ);
+
+	// Initialise the grid
+	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
+	MathVector2D<int> grid1 (32, 32);
+	Invslot(0, duoRod, grid1);	// Need an oamId management system
 }
 
 // MARK: Increment the time
