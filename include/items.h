@@ -5,6 +5,7 @@
 #include "main.h"
 
 #include "lgDuoRod.h"
+#include "ntEmpty.h"
 
 #ifndef ITEMS_H
 #define ITEMS_H 

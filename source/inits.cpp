@@ -93,32 +93,3 @@ void initMap(int mapNum) {
 			break;
 	}
 }
-
-// MARK: Initialise GL
-void initGL() {
-	glInit();			// Initialise GL
-	
-	glEnable(GL_ANTIALIAS);		// Enable antialiasing
-	glClearColor(0, 0, 0, 31);	// Opaque background so antialiasing works
-	glClearPolyID(63);		// Unique background polyID so antialiasing works
-	glClearDepth(0x7FFF);
-
-	glViewport(0, 0, 255, 191);	// Take up whole screen
-
-	glSetToonTableRange(0, 15, RGB15(8, 8, 8));		// First half lighting
-	glSetToonTableRange(16, 31, RGB15(24, 24, 24));		// Second half lighting
-
-	glMatrixMode(GL_PROJECTION);	// Set the projection matrix
-	glLoadIdentity();
-	gluPerspective(70,		// Vertical field of view (-32768 to 32767)
-			256/192,	// Aspect ratio
-			0.1,		// Near mask
-			40);		// Far mask
-
-	glLight(0, RGB15(16,16,16) , 0, floattov10(-1.0), 0);
-	glLight(1, RGB15(16,16,16), floattov10(-1.0), 0, 0);
-
-	gluLookAt(0.0, 0.0, -3.0,		// Camera position
-			0.0, 0.0, 0.0,		// Look at
-			0.0, -1.0, 0.0);	// Up
-} 
