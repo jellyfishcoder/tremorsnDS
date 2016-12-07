@@ -1,3 +1,6 @@
+os:
+        osx
+
 language:
         - cpp
 
@@ -5,12 +8,10 @@ compiler:
         - gcc
 
 before_install:
-        - sudo apt-get update
+        - brew update
+        - brew list | grep perl || brew install perl || brew outdated perl || brew upgrade perl
+        - brew list | grep glib || brew install glib || brew outdated glib || brew upgrade glib
 install:
-        # Dependancies
-        - sudo apt-get install perl
-        - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-        - sudo apt-get install glibc-2.13-1
         # devkitARM Installation
         - cd ~/
         - mkdir ${DEVKITPRO}
@@ -20,8 +21,5 @@ install:
 
 script:
         # Fix stuffs
-        - cd /usr/lib/x86_64-linux-gnu/
-        - sudo mv libstdc++.so.6 libstdc++.so.6.orig
-        - sudo ln -s libstdc++.so.6.0.14 libstdc++.so.6
         - cd ~/build/jellyfishcoder/tremorsnDS
         - make
