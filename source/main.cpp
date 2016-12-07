@@ -289,16 +289,17 @@ void startGame(const char* save) {
 		mmMainScreenBitmapLen);
 	
 	// Restart/start the sub Oam
+	swiWaitForVBlank();
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
-
+	
 	// Enable a window to hold the sprite grid
-	windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
-	oamWindowEnable(&oamSub, WINDOW_OBJ);
+	//windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
+	//oamWindowEnable(&oamSub, WINDOW_OBJ);
 
 	// Initialise the grid
 	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
-	MathVector2D<int> grid1 (16, 16);
-	Invslot(3, duoRod, grid1);	// Need an oamId management system
+	MathVector2D<int> grid1 (32, 32);
+	Invslot(0, duoRod, grid1);	// Need an oamId management system
 }
 
 // MARK: Increment the time

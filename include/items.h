@@ -39,10 +39,10 @@ class Item {
 		
 		MathVector2D<unsigned short> pos;		// Posistion in inventory
 
-		const void** tile_src;				// Image source for dmaCopyHalfWords()
+		const void* tile_src;				// Image source for dmaCopyHalfWords()
 		uint32 tile_len;
 		
-		const void** pal_src;
+		const void* pal_src;
 		uint32 pal_len;
 
 		void init(const Item & other);
