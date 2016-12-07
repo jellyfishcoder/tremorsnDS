@@ -5,7 +5,7 @@ os:
         - osx
 
 compiler:
-        - clang
+        - gcc
 
 before_install:
         - brew update
