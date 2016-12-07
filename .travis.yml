@@ -9,8 +9,10 @@ compiler:
 
 before_install:
         - brew update
-        - brew list | grep perl || brew install perl || brew outdated perl || brew upgrade perl
-        - brew list | grep glib || brew install glib || brew outdated glib || brew upgrade glib
+        - brew list | grep perl || brew install perl
+        - brew outdated perl || brew upgrade perl
+        - brew list | grep glib || brew install glib
+        - brew outdated glib || brew upgrade glib
 install:
         # devkitARM Installation
         - cd ~/
