@@ -1,11 +1,12 @@
-os:
-        - osx
-
+sudo: false
 language:
         - cpp
 
+os:
+        - osx
+
 compiler:
-        - gcc
+        - clang
 
 before_install:
         - brew update
@@ -20,6 +21,9 @@ install:
         - cd ${DEVKITPRO}
         - wget 'https://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitARMupdate.pl'
         - perl -- devkitARMupdate.pl
+        # libnds Compatible Cereal Library
+        - cd ~/
+        - git clone https://github.com/jellyfishcoder/cereal.git
 
 script:
         # Fix stuffs
