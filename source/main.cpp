@@ -290,7 +290,7 @@ void startGame(const char* save) {
 	
 	// Restart/start the sub Oam
 	swiWaitForVBlank();
-	oamInit(&oamSub, SpriteMapping_1D_128, false);
+	oamInit(&oamSub, SpriteMapping_1D_32, false);
 	
 	// Enable a window to hold the sprite grid
 	//windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);

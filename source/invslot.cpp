@@ -9,7 +9,7 @@ Invslot::Invslot(int _oamId, Item _item, MathVector2D<int> _position) {
 	
 	// Check for item icon and copy it
 	dmaCopyHalfWords(3, this->item.tile_src, this->gfx_mem, this->item.tile_len);
-	dmaCopyHalfWords(3, this->item.pal_src, &SPRITE_PALETTE[this->oamId * 16], this->item.pal_len);
+	dmaCopyHalfWords(3, this->item.pal_src, &SPRITE_PALETTE_SUB[this->oamId * 16], this->item.pal_len);
 
 	// Set the oam
 	oamSet(&oamSub,
@@ -48,7 +48,7 @@ void Invslot::Update(Item _item, MathVector2D<int> _position) {
 void Invslot::Update(Item _item) {
 	this->item = _item; 
 	// Copy new image source to gfx
-	dmaCopyHalfWords(3, &(this->item.tile_src), this->gfx_mem, this->item.tile_len);
+	dmaCopyHalfWords(3, this->item.tile_src, this->gfx_mem, this->item.tile_len);
 	dmaCopyHalfWords(3, this->item.pal_src, &SPRITE_PALETTE[this->oamId * 16], this->item.pal_len);
 }
 
@@ -62,6 +62,6 @@ void Invslot::Update() {
 	// Move sprite
 	oamSetXY(&oamSub, this->oamId, this->position.x - 16, this->position.y - 16);
 	// Copy new image source to gfx
-	dmaCopyHalfWords(3, &(this->item.tile_src), this->gfx_mem, this->item.tile_len);
+	dmaCopyHalfWords(3, this->item.tile_src, this->gfx_mem, this->item.tile_len);
 	dmaCopyHalfWords(3, this->item.pal_src, &SPRITE_PALETTE[this->oamId * 16], this->item.pal_len);
 }
