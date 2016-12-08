@@ -272,10 +272,10 @@ void startGame(const char* save) {
 	//glClearDepth(GL_MAX_DEPTH);		// Set the max rendering distance to GL_MAX_DEPTH which is 0x7FFF
 
 	// Start time system
-	timerStart(0,				// Timer 0
-			ClockDivider_1024,	// 327,284.98 ticks per second
-			327285,			// About one overflow per second
-			incrementTime);		// Increment timer
+	//timerStart(0,				// Timer 0
+	//		ClockDivider_1024,	// 327,284.98 ticks per second
+	//		327285,			// About one overflow per second
+	//		incrementTime);		// Increment timer
 	
 	// Copy a blank parchment background to the main screen
 	int bg3sub = bgInitSub(3,
@@ -308,10 +308,11 @@ void startGame(const char* save) {
 	oamWindowEnable(&oamSub, WINDOW_OBJ);
 
 	// Initialise the grid
-	Invslot *invGrid[20];
+	std::vector<Invslot> invGrid;
+	invGrid.reserve(20);
 	for(int i = 0; i < 20; i++) {
 		MathVector2D<int> tempLoc(40 * (i % 5), 40 * (int)(i/5));
-		invGrid[i] = new Invslot(i, empty, tempLoc);
+		invGrid.push_back(Invslot(i, empty, tempLoc));
 	}
 	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
 	//MathVector2D<int> grid1 (32, 32);
