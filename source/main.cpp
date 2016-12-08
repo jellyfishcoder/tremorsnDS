@@ -304,13 +304,13 @@ void startGame(const char* save) {
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 	
 	// Enable a window to hold the sprite grid
-	//windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
-	//oamWindowEnable(&oamSub, WINDOW_OBJ);
+	windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
+	oamWindowEnable(&oamSub, WINDOW_OBJ);
 
 	// Initialise the grid
-	Invslot *invGrid[28];
-	for(int i = 0; i < 28; i++) {
-		MathVector2D<int> tempLoc (32,32);//(32 + 16*(i % 7), 16 + 16*(int)(i/7));
+	Invslot *invGrid[20];
+	for(int i = 0; i < 20; i++) {
+		MathVector2D<int> tempLoc(40 * (i % 5), 40 * (int)(i/5));
 		invGrid[i] = new Invslot(i, empty, tempLoc);
 	}
 	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
