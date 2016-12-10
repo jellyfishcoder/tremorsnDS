@@ -283,14 +283,15 @@ void startGame(const char* save) {
 			BgSize_B16_256x256,
 			2,
 			0);
+	// Set affine transform registers to identity
 	REG_BG3PA_SUB = 1 << 8;
 	REG_BG3PB_SUB = 0;
 	REG_BG3PC_SUB = 0;
 	REG_BG3PD_SUB = 1 << 8;
-
+	// Set X and Y offset to match gfx 32k offset
 	REG_BG3X_SUB = 0;
 	REG_BG3Y_SUB = 2;
-
+	// IDK if the following is necessary but it makes it look more better the longer the things are that you can make long and fancy
 	bgUpdate();
 
 	// Copy the blank parchment graphics to the gfx memory
@@ -304,19 +305,22 @@ void startGame(const char* save) {
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 	
 	// Enable a window to hold the sprite grid
-	windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
 	oamWindowEnable(&oamSub, WINDOW_OBJ);
+	windowSetBoundsSub(WINDOW_OBJ, 13, 16, 243, 176);
 
-	// Initialise the grid
 	std::vector<Invslot> invGrid;
-	invGrid.reserve(20);
-	for(int i = 0; i < 20; i++) {
-		MathVector2D<int> tempLoc(40 * (i % 5), 40 * (int)(i/5));
+	invGrid.reserve(30);
+	for(int i = 0; i < 30; i++) {
+		MathVector2D<int> tempLoc(13 + 40 * (i % 6), 16 + 32 * (int)(i/6));
 		invGrid.push_back(Invslot(i, empty, tempLoc));
 	}
-	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
-	//MathVector2D<int> grid1 (32, 32);
-	//Invslot(0, duoRod, grid1);	// Need an oamId management system
+	swiWaitForVBlank();
+	oamUpdate(&oamSub);
+
+	// Temporary waiting code
+	//while(true==true) {
+	//	swiWaitForVBlank();
+	//}
 }
 
 // MARK: Increment the time

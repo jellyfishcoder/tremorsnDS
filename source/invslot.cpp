@@ -14,8 +14,8 @@ Invslot::Invslot(int _oamId, Item _item, MathVector2D<int> _position) {
 	// Set the oam
 	oamSet(&oamSub,
 		this->oamId,
-		this->position.x - 16,
-		this->position.y - 16,
+		this->position.x,
+		this->position.y,
 		0,
 		this->oamId,
 		SpriteSize_32x32,
@@ -39,7 +39,7 @@ void Invslot::Update(Item _item, MathVector2D<int> _position) {
 	this->item = _item;
 	this->position = _position;
 	// Move sprite
-	oamSetXY(&oamSub, this->oamId, this->position.x - 16, this->position.y - 16);
+	oamSetXY(&oamSub, this->oamId, this->position.x, this->position.y);
 	// Copy new image source to gfx
 	dmaCopyHalfWords(3, this->item.tile_src, this->gfx_mem, this->item.tile_len);
 	dmaCopyHalfWords(3, this->item.pal_src, &SPRITE_PALETTE[this->oamId * 16], this->item.pal_len);
@@ -55,12 +55,12 @@ void Invslot::Update(Item _item) {
 void Invslot::Update(MathVector2D<int> _position) {
 	this->position = _position;
 	// Move sprite
-	oamSetXY(&oamSub, this->oamId, this->position.x - 16, this->position.y - 16);
+	oamSetXY(&oamSub, this->oamId, this->position.x, this->position.y);
 }
 
 void Invslot::Update() {
 	// Move sprite
-	oamSetXY(&oamSub, this->oamId, this->position.x - 16, this->position.y - 16);
+	oamSetXY(&oamSub, this->oamId, this->position.x, this->position.y);
 	// Copy new image source to gfx
 	dmaCopyHalfWords(3, this->item.tile_src, this->gfx_mem, this->item.tile_len);
 	dmaCopyHalfWords(3, this->item.pal_src, &SPRITE_PALETTE[this->oamId * 16], this->item.pal_len);
