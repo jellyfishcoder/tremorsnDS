@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <vector>
 // Background Headers (IK mm for main menu is confusing with mm for maxmod)
 #include "mmMainScreen.h"
 #include "mmSubScreen.h"
@@ -44,6 +44,4 @@ void getSaveName();
 void keyPress(int c);
 void hideKeyboardW(int splashID);
 
-// Externs
-//const Item duoRod;
 #endif

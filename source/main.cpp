@@ -22,19 +22,22 @@ bool tBreak;
 u32 inGameTime = 0;
 
 // MARK: Item Constants
+// SUBMARK: Empty (id 0)
+Item empty(1, CONTACT, ntEmptyTiles, ntEmptyTilesLen, ntEmptyPal, ntEmptyPalLen);
+/*
 // SUBMARK: Basic Sword (id 1)
-//const Item bsSword(1, CONTACT, bsSwordTiles, bsSwordTilesLen, bsSwordPal, bsSwordPalLen, 1);	// Really, its worse than flinging bs as a bioweapon at your enemy...
+const Item bsSword(1, CONTACT, bsSwordTiles, bsSwordTilesLen, bsSwordPal, bsSwordPalLen, 1);	// Really, its worse than flinging bs as a bioweapon at your enemy...
 // SUBMARK: Apple (id 2)
-//const Item apple(10, H_RECOVERY, appleTiles, appleTilesLen, applePal, applePalLen, 2);	// Decent health recovery
+const Item apple(10, H_RECOVERY, appleTiles, appleTilesLen, applePal, applePalLen, 2);	// Decent health recovery
 // SUBMARK: Mysterious Drink (id 3)
-//const Item mysDrink(75, H_UNRECOV, mysDrinkTiles, mysDrinkTilesLen, mysDrinkPal, mysDrinkPalLen, 3);
+const Item mysDrink(75, H_UNRECOV, mysDrinkTiles, mysDrinkTilesLen, mysDrinkPal, mysDrinkPalLen, 3);
 // SUBMARK: Stabby Knife (id 4)
-//const Item stabbyKnife(5, CONTACT, stabbyKnifeTiles, stabbyKnifeTilesLen, stabbyKnifePal, stabbyKnifePalLen, 4);
+const Item stabbyKnife(5, CONTACT, stabbyKnifeTiles, stabbyKnifeTilesLen, stabbyKnifePal, stabbyKnifePalLen, 4);
 // SUBMARK: Infinite Bow (id 5) (only infinite until I decide to make it have an ammo system, but it doesnt even display yet so it doesnt matter)
-//const Item infiniteBow(3, RANGED, 5);
-
+const Item infiniteBow(3, RANGED, 5);
+*/
 // SUBMARK: IDK (id 6)
-const Item duoRod(20, CONTACT, lgDuoRodTiles, lgDuoRodTilesLen, lgDuoRodPal, lgDuoRodPalLen);
+//const Item duoRod(20, CONTACT, lgDuoRodTiles, lgDuoRodTilesLen, lgDuoRodPal, lgDuoRodPalLen);
 
 // MARK: main
 int main(void) {
@@ -254,32 +257,41 @@ void mainMenu(void) {
 	startGame(nameEntry);
 }
 
+// MARK: Start Game using save file
 void startGame(const char* save) {
 	lcdMainOnTop();
 	// Create new or load save file (hangs system)
 	//SaveData saveFile(save);
-	//initGL(); (screws stuff up)
+
+	// Setup GL	
+	//glInit();
+
+	//glEnable(GL_ANTIALIAS);			// Enable antialiasing
+	//glClearColor(0, 0, 0, 31);		// Set the screen background colour to opaque black
+	//glClearPolyID(31);			// Use last polyID for background
+	//glClearDepth(GL_MAX_DEPTH);		// Set the max rendering distance to GL_MAX_DEPTH which is 0x7FFF
 
 	// Start time system
-	timerStart(0,				// Timer 0
-			ClockDivider_1024,	// 327,284.98 ticks per second
-			327285,			// About one overflow per second
-			incrementTime);	// Increment timer
-
+	//timerStart(0,				// Timer 0
+	//		ClockDivider_1024,	// 327,284.98 ticks per second
+	//		327285,			// About one overflow per second
+	//		incrementTime);		// Increment timer
+	
 	// Copy a blank parchment background to the main screen
 	int bg3sub = bgInitSub(3,
 			BgType_Bmp16,
 			BgSize_B16_256x256,
 			2,
 			0);
+	// Set affine transform registers to identity
 	REG_BG3PA_SUB = 1 << 8;
 	REG_BG3PB_SUB = 0;
 	REG_BG3PC_SUB = 0;
 	REG_BG3PD_SUB = 1 << 8;
-
+	// Set X and Y offset to match gfx 32k offset
 	REG_BG3X_SUB = 0;
 	REG_BG3Y_SUB = 2;
-
+	// IDK if the following is necessary but it makes it look more better the longer the things are that you can make long and fancy
 	bgUpdate();
 
 	// Copy the blank parchment graphics to the gfx memory
@@ -290,16 +302,26 @@ void startGame(const char* save) {
 	
 	// Restart/start the sub Oam
 	swiWaitForVBlank();
-	oamInit(&oamSub, SpriteMapping_1D_32, false);
+	oamInit(&oamSub, SpriteMapping_1D_128, false);
 	
 	// Enable a window to hold the sprite grid
-	//windowSetBoundsSub(WINDOW_OBJ, 0, 0, 256, 160);
 	//oamWindowEnable(&oamSub, WINDOW_OBJ);
+	//windowSetBoundsSub(WINDOW_OBJ, 13, 16, 243, 176);
 
-	// Initialise the grid
-	// Can not be done in another function or pointers would be crazy, just easier to do it here (it already has pointers to constant pointers to voids, do we need pointers to pointers to constant pointers to voids now or something?)
-	MathVector2D<int> grid1 (32, 32);
-	Invslot(0, duoRod, grid1);	// Need an oamId management system
+	std::vector<Invslot> invGrid;
+	invGrid.reserve(30);
+	for(int i = 0; i < 30; i++) {
+		MathVector2D<int> tempLoc(13 + 40 * (i % 6), 16 + 32 * (int)(i/6));
+		invGrid.push_back(Invslot(i, empty, tempLoc));
+		swiWaitForVBlank();
+	}
+	swiWaitForVBlank();
+	oamUpdate(&oamSub);
+
+	// Temporary waiting code
+	//while(true==true) {
+	//	swiWaitForVBlank();
+	//}
 }
 
 // MARK: Increment the time
