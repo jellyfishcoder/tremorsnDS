@@ -27,7 +27,7 @@ Item::Item(unsigned int _stat, Type _type, const void* _img_src, uint32 _tile_le
 
 	this->tile_src = _img_src;
 	this->tile_len = _tile_len;
-	
+
 	this->pal_src = _pal_src;
 	this->pal_len = _pal_len;
 }

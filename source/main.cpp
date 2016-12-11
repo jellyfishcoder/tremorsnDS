@@ -23,7 +23,7 @@ u32 inGameTime = 0;
 
 // MARK: Item Constants
 // SUBMARK: Empty (id 0)
-const Item empty(1, CONTACT, ntEmptyTiles, ntEmptyTilesLen, ntEmptyPal, ntEmptyPalLen);
+Item empty(1, CONTACT, ntEmptyTiles, ntEmptyTilesLen, ntEmptyPal, ntEmptyPalLen);
 /*
 // SUBMARK: Basic Sword (id 1)
 const Item bsSword(1, CONTACT, bsSwordTiles, bsSwordTilesLen, bsSwordPal, bsSwordPalLen, 1);	// Really, its worse than flinging bs as a bioweapon at your enemy...
@@ -37,7 +37,7 @@ const Item stabbyKnife(5, CONTACT, stabbyKnifeTiles, stabbyKnifeTilesLen, stabby
 const Item infiniteBow(3, RANGED, 5);
 */
 // SUBMARK: IDK (id 6)
-const Item duoRod(20, CONTACT, lgDuoRodTiles, lgDuoRodTilesLen, lgDuoRodPal, lgDuoRodPalLen);
+//const Item duoRod(20, CONTACT, lgDuoRodTiles, lgDuoRodTilesLen, lgDuoRodPal, lgDuoRodPalLen);
 
 // MARK: main
 int main(void) {
@@ -305,14 +305,15 @@ void startGame(const char* save) {
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 	
 	// Enable a window to hold the sprite grid
-	oamWindowEnable(&oamSub, WINDOW_OBJ);
-	windowSetBoundsSub(WINDOW_OBJ, 13, 16, 243, 176);
+	//oamWindowEnable(&oamSub, WINDOW_OBJ);
+	//windowSetBoundsSub(WINDOW_OBJ, 13, 16, 243, 176);
 
 	std::vector<Invslot> invGrid;
 	invGrid.reserve(30);
 	for(int i = 0; i < 30; i++) {
 		MathVector2D<int> tempLoc(13 + 40 * (i % 6), 16 + 32 * (int)(i/6));
 		invGrid.push_back(Invslot(i, empty, tempLoc));
+		swiWaitForVBlank();
 	}
 	swiWaitForVBlank();
 	oamUpdate(&oamSub);

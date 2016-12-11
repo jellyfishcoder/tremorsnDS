@@ -6,7 +6,7 @@ Invslot::Invslot(int _oamId, Item _item, MathVector2D<int> _position) {
 	this->position = _position;
 	// Check item icon and display it and move self
 	this->gfx_mem = oamAllocateGfx(&oamSub, SpriteSize_32x32, SpriteColorFormat_16Color);
-	
+
 	// Check for item icon and copy it
 	dmaCopyHalfWords(3, this->item.tile_src, this->gfx_mem, this->item.tile_len);
 	dmaCopyHalfWords(3, this->item.pal_src, &SPRITE_PALETTE_SUB[this->oamId * 16], this->item.pal_len);

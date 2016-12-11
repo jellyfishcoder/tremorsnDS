@@ -50,7 +50,6 @@ class Item {
 	public:
 		Item(unsigned int _stat, Type _type, const void* _img_src, uint32 _tile_len, const void* _pal_src, uint32 _pal_len);
 		Item();						// Needed for stuff
-		
 };
 
 #endif
