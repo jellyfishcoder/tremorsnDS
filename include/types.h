@@ -83,4 +83,7 @@ template<class T>
 		}
 	}
 
+// MARK: Typedefs
+typedef int32 f32;	// Fixed 32
+
 #endif 
